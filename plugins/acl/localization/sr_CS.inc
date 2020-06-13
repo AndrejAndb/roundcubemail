@@ -2,23 +2,23 @@
 
 /*
  +-----------------------------------------------------------------------+
- | plugins/acl/localization/<lang>.inc                                   |
- |                                                                       |
  | Localization file of the Roundcube Webmail ACL plugin                 |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-acl/
 */
+
 $labels['sharing'] = 'Дељење';
 $labels['myrights'] = 'Права приступа';
 $labels['username'] = 'Корисник:';
 $labels['advanced'] = 'Напредни режим';
+$labels['add'] = 'Додај';
 $labels['newuser'] = 'Додај унос';
 $labels['editperms'] = 'Уреди дозволе';
 $labels['actions'] = 'Радње права приступа...';
@@ -49,6 +49,7 @@ $labels['shortaclc'] = 'Направи';
 $labels['shortaclk'] = 'Направи';
 $labels['shortacld'] = 'Обриши';
 $labels['shortaclt'] = 'Обриши';
+$labels['shortacla'] = 'Администрирај';
 $labels['shortaclother'] = 'Друго';
 $labels['shortaclread'] = 'Читање';
 $labels['shortaclwrite'] = 'Упис';

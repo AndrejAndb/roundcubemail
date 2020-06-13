@@ -2,11 +2,10 @@
 
 /**
  +-----------------------------------------------------------------------+
- | program/steps/addressbook/export.inc                                  |
- |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2008-2013, The Roundcube Dev Team                       |
- | Copyright (C) 2011-2013, Kolab Systems AG                             |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
+ | Copyright (C) Kolab Systems AG                                        |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -14,7 +13,6 @@
  |                                                                       |
  | PURPOSE:                                                              |
  |   Export the selected address book as vCard file                      |
- |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  | Author: Aleksander Machniak <machniak@kolabsys.com>                   |
@@ -71,6 +69,11 @@ else if (!empty($_REQUEST['_cid'])) {
 
     foreach ($cids as $s => $ids) {
         $source = $RCMAIL->get_address_book($s);
+
+        // reset page and page size (#6103)
+        $source->set_page(1);
+        $source->set_pagesize(count($ids));
+
         $result = $source->search('ID', $ids, 1, true, true);
 
         while ($record = $result->next()) {

@@ -5,25 +5,35 @@
  *
  * @package Tests
  */
-class Framework_Washtml extends PHPUnit_Framework_TestCase
+class Framework_Washtml extends PHPUnit\Framework\TestCase
 {
+    /**
+     * A helper method to remove comments added by rcube_washtml
+     */
+    function cleanupResult($html)
+    {
+        return preg_replace('/<!-- [a-z]+ (ignored|not allowed) -->/', '', $html);
+    }
+
 
     /**
      * Test the elimination of some XSS vulnerabilities
      */
-    function test_html_xss3()
+    function test_html_xss()
     {
         // #1488850
-        $html = '<p><a href="data:text/html,&lt;script&gt;alert(document.cookie)&lt;/script&gt;">Firefox</a>'
+        $html = '<a href="data:text/html,&lt;script&gt;alert(document.cookie)&lt;/script&gt;">Firefox</a>'
             .'<a href="vbscript:alert(document.cookie)">Internet Explorer</a></p>'
-            .'<p><A href="data:text/html,&lt;script&gt;alert(document.cookie)&lt;/script&gt;">Firefox</a>'
-            .'<A HREF="vbscript:alert(document.cookie)">Internet Explorer</a></p>';
+            .'<A href="data:text/html,&lt;script&gt;alert(document.cookie)&lt;/script&gt;">Firefox</a>'
+            .'<A HREF="vbscript:alert(document.cookie)">Internet Explorer</a>'
+            .'<a href="data:application/xhtml+xml;base64,PGh0bW">CLICK ME</a>'; // #6896
 
         $washer = new rcube_washtml;
         $washed = $washer->wash($html);
 
         $this->assertNotRegExp('/data:text/', $washed, "Remove data:text/html links");
         $this->assertNotRegExp('/vbscript:/', $washed, "Remove vbscript: links");
+        $this->assertNotRegExp('/data:application/', $washed, "Remove data:application links");
     }
 
     /**
@@ -67,24 +77,34 @@ class Framework_Washtml extends PHPUnit_Framework_TestCase
         $washer = new rcube_washtml;
 
         $html   = "<!--[if gte mso 10]><p>p1</p><!--><p>p2</p>";
-        $washed = $washer->wash($html);
+        $washed = $this->cleanupResult($washer->wash($html));
 
-        $this->assertEquals('<!-- html ignored --><!-- body ignored --><p>p2</p>', $washed, "HTML conditional comments (#1489004)");
+        $this->assertEquals('<p>p2</p>', $washed, "HTML conditional comments (#1489004)");
 
         $html   = "<!--TestCommentInvalid><p>test</p>";
-        $washed = $washer->wash($html);
+        $washed = $this->cleanupResult($washer->wash($html));
 
-        $this->assertEquals('<!-- html ignored --><!-- body ignored --><p>test</p>', $washed, "HTML invalid comments (#1487759)");
+        $this->assertEquals('<p>test</p>', $washed, "HTML invalid comments (#1487759)");
 
         $html   = "<p>para1</p><!-- comment --><p>para2</p>";
-        $washed = $washer->wash($html);
+        $washed = $this->cleanupResult($washer->wash($html));
 
-        $this->assertEquals('<!-- html ignored --><!-- body ignored --><p>para1</p><p>para2</p>', $washed, "HTML comments - simple comment");
+        $this->assertEquals('<p>para1</p><p>para2</p>', $washed, "HTML comments - simple comment");
 
         $html   = "<p>para1</p><!-- <hr> comment --><p>para2</p>";
-        $washed = $washer->wash($html);
+        $washed = $this->cleanupResult($washer->wash($html));
 
-        $this->assertEquals('<!-- html ignored --><!-- body ignored --><p>para1</p><p>para2</p>', $washed, "HTML comments - tags inside (#1489904)");
+        $this->assertEquals('<p>para1</p><p>para2</p>', $washed, "HTML comments - tags inside (#1489904)");
+
+        $html   = "<p>para1</p><!-- comment => comment --><p>para2</p>";
+        $washed = $this->cleanupResult($washer->wash($html));
+
+        $this->assertEquals('<p>para1</p><p>para2</p>', $washed, "HTML comments - bracket inside");
+
+        $html   = "<p><!-- span>1</span -->\n<span>2</span>\n<!-- >3</span --><span>4</span></p>";
+        $washed = $this->cleanupResult($washer->wash($html));
+
+        $this->assertEquals("<p>\n<span>2</span>\n<span>4</span></p>", $washed, "HTML comments (#6464)");
     }
 
     /**
@@ -193,6 +213,26 @@ class Framework_Washtml extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test deprecated body attributes (#7109)
+     */
+    function test_style_body_attrs()
+    {
+        $html = "<html><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
+            <body bgcolor=\"#fff\" text=\"#000\" background=\"#test\" link=\"#111\" alink=\"#222\" vlink=\"#333\">
+            </body></html>";
+
+        $washer = new rcube_washtml(array('html_elements' => array('body')));
+        $washed = $washer->wash($html);
+
+        $this->assertRegExp('|bgcolor="#fff"|', $washed, "Body bgcolor attribute");
+        $this->assertRegExp('|text="#000"|', $washed, "Body text attribute");
+        $this->assertRegExp('|background="#test"|', $washed, "Body background attribute");
+        $this->assertRegExp('|link="#111"|', $washed, "Body link attribute");
+        $this->assertRegExp('|alink="#222"|', $washed, "Body alink attribute");
+        $this->assertRegExp('|vlink="#333"|', $washed, "Body vlink attribute");
+    }
+
+    /**
      * Test style item fixes
      */
     function test_style_wash()
@@ -295,7 +335,7 @@ class Framework_Washtml extends PHPUnit_Framework_TestCase
     function test_wash_mathml()
     {
         $mathml = '<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body>
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics>
+            <math><semantics>
                 <mrow>
                     <msub><mi>I</mi><mi>D</mi></msub>
                     <mo>=</mo>
@@ -312,7 +352,7 @@ class Framework_Washtml extends PHPUnit_Framework_TestCase
             </body></html>';
 
         $exp = '<!-- html ignored --><!-- head ignored --><!-- meta ignored --><!-- body ignored -->
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><semantics>
+            <math><semantics>
                 <mrow>
                     <msub><mi>I</mi><mi>D</mi></msub>
                     <mo>=</mo>
@@ -357,5 +397,126 @@ class Framework_Washtml extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($washer->extlinks);
         $this->assertNotContains('TRACKING', $washed, "Src attribute of <video> tag (#5583)");
+    }
+
+    /**
+     * Test external links
+     */
+    function test_extlinks()
+    {
+        $html = array(
+            array("<link href=\"http://TRACKING_URL/\">", true),
+            array("<link href=\"src:abc\">", false),
+            array("<img src=\"http://TRACKING_URL/\">", true),
+            array("<img src=\"data:image\">", false),
+            array('<p style="backgr\\ound-image: \\ur\\l(\'http://TRACKING_URL\')"></p>', true),
+        );
+
+        foreach ($html as $item) {
+            $washer = new rcube_washtml;
+            $washed = $washer->wash($item[0]);
+
+            $this->assertSame($item[1], $washer->extlinks);
+        }
+
+        foreach ($html as $item) {
+            $washer = new rcube_washtml(array('allow_remote' => true));
+            $washed = $washer->wash($item[0]);
+
+            $this->assertFalse($washer->extlinks);
+        }
+    }
+
+    function test_textarea_content_escaping()
+    {
+        $html = '<textarea><p style="x:</textarea><img src=x onerror=alert(1)>">';
+
+        $washer = new rcube_washtml;
+        $washed = $washer->wash($html);
+
+        $this->assertNotContains('onerror=alert(1)>', $washed);
+        $this->assertContains('&lt;p style=&quot;x:', $washed);
+    }
+
+    /**
+     * Test css_prefix feature
+     */
+    function test_css_prefix()
+    {
+        $washer = new rcube_washtml(array('css_prefix' => 'test'));
+
+        $html   = '<p id="my-id"><label for="my-other-id" class="my-class1 my-class2">test</label></p>';
+        $washed = $washer->wash($html);
+
+        $this->assertContains('id="testmy-id"', $washed);
+        $this->assertContains('for="testmy-other-id"', $washed);
+        $this->assertContains('class="testmy-class1 testmy-class2"', $washed);
+    }
+
+    /**
+     * Test removing xml:namespace tag
+     */
+    function test_xml_namespace()
+    {
+        $html = '<p><?xml:namespace prefix = "xsl" /></p>';
+
+        $washer = new rcube_washtml;
+        $washed = $this->cleanupResult($washer->wash($html));
+
+        $this->assertNotContains('&lt;?xml:namespace"', $washed);
+        $this->assertSame($washed, '<p></p>');
+    }
+
+    /**
+     * Test missing main HTML hierarchy tags (#6713)
+     */
+    function test_missing_tags()
+    {
+        $washer = new rcube_washtml();
+
+        $html   = '<head></head>First line<br />Second line';
+        $washed = $washer->wash($html);
+
+        $this->assertContains('First line', $washed);
+
+        $html   = 'First line<br />Second line';
+        $washed = $washer->wash($html);
+
+        $this->assertContains('First line', $washed);
+
+        $html   = '<html>First line<br />Second line</html>';
+        $washed = $washer->wash($html);
+
+        $this->assertContains('>First line', $washed);
+
+        $html   = '<html><head></head>First line<br />Second line</html>';
+        $washed = $washer->wash($html);
+
+        $this->assertContains('First line', $washed);
+
+        // Not really valid HTML, but because its common in email world
+        // and because it works with DOMDocument, we make sure its supported
+        $html   = 'First line<br /><html><body>Second line';
+        $washed = $washer->wash($html);
+
+        $this->assertContains('First line', $washed);
+
+        $html   = 'First line<br /><html>Second line';
+        $washed = $washer->wash($html);
+
+        $this->assertContains('First line', $washed);
+    }
+
+    /**
+     * Test CDATA cleanup
+     */
+    function test_cdata()
+    {
+        $html = '<p><![CDATA[<script>alert(document.cookie)</script>]]></p>';
+
+        $washer = new rcube_washtml;
+        $washed = $washer->wash($html);
+
+        $this->assertTrue(strpos($washed, '<script>') === false, "CDATA content");
     }
 }

@@ -2,29 +2,30 @@
 
 /*
  +-----------------------------------------------------------------------+
- | plugins/managesieve/localization/<lang>.inc                           |
- |                                                                       |
  | Localization file of the Roundcube Webmail Managesieve plugin         |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-managesieve/
 */
+
+
 $labels['filters'] = 'Filtros';
 $labels['managefilters'] = 'Gerer filtros de e-mail entrante';
 $labels['filtername'] = 'Nomine de filtro';
 $labels['newfilter'] = 'Nove filtro';
 $labels['filteradd'] = 'Adder filtro';
 $labels['filterdel'] = 'Deler filtro';
+$labels['scope'] = 'Ambito';
 $labels['moveup'] = 'Displaciar in alto';
 $labels['movedown'] = 'Displaciar a basso';
 $labels['filterallof'] = 'que satisface tote le sequente regulas';
-$labels['filteranyof'] = 'que satisface un del sequente regulas';
+$labels['filteranyof'] = 'que satisface qualcunque del sequente regulas';
 $labels['filterany'] = 'tote le messages';
 $labels['filtercontains'] = 'contine';
 $labels['filternotcontains'] = 'non contine';
@@ -58,21 +59,15 @@ $labels['vacationaddr'] = 'Mi adresses de e-mail:';
 $labels['vacationdays'] = 'Frequentia de invio de messages (in dies):';
 $labels['vacationinterval'] = 'Frequentia de invio de messages:';
 $labels['vacationreason'] = 'Texto del message (motivo del absentia):';
+$labels['vacationfrom'] = 'Adresse del expeditor pro responder:';
 $labels['vacationsubject'] = 'Subjecto del message:';
 $labels['days'] = 'dies';
 $labels['seconds'] = 'secundas';
 $labels['rulestop'] = 'Cessar de evalutar regulas';
 $labels['enable'] = 'Activar/Disactivar';
-$labels['filterset'] = 'Gruppo de filtros';
 $labels['filtersets'] = 'Gruppos de filtros';
-$labels['filtersetadd'] = 'Adder gruppo de filtros';
-$labels['filtersetdel'] = 'Deler le gruppo de filtros actual';
-$labels['filtersetact'] = 'Activar le gruppo de filtros actual';
-$labels['filtersetdeact'] = 'Disactivar le gruppo de filtros actual';
 $labels['filterseteditraw'] = 'Modificar gruppo de filtros';
 $labels['filterdef'] = 'Definition del filtro';
-$labels['filtersetname'] = 'Nomine del gruppo de filtros';
-$labels['newfilterset'] = 'Nove gruppo de filtros';
 $labels['active'] = 'active';
 $labels['none'] = 'nulle';
 $labels['fromset'] = 'ab gruppo';
@@ -124,6 +119,7 @@ $labels['filtercreate'] = 'Crear filtro';
 $labels['usedata'] = 'Usar le sequente datos in le filtro:';
 $labels['nextstep'] = 'Proxime passo';
 $labels['...'] = '...';
+$labels['string'] = 'Catena';
 $labels['currdate'] = 'Data actual';
 $labels['datetest'] = 'Data';
 $labels['dateheader'] = 'capite:';
@@ -161,25 +157,27 @@ $labels['asciicasemap'] = 'non sensibile al differentia inter majusculas e minus
 $labels['asciinumeric'] = 'numeric (ascii-numeric)';
 $labels['index'] = 'indice:';
 $labels['indexlast'] = 'a retro';
-$labels['vacation'] = 'Vacantias';
 $labels['vacation.reply'] = 'Message de responsa';
 $labels['vacation.advanced'] = 'Configuration avantiate';
+$labels['vacation.from'] = 'Adresse del expeditor pro responder';
 $labels['vacation.subject'] = 'Subjecto';
 $labels['vacation.body'] = 'Texto';
-$labels['vacation.start'] = 'Initio del vacantias';
-$labels['vacation.end'] = 'Fin del vacantias';
 $labels['vacation.status'] = 'Stato';
 $labels['vacation.on'] = 'Active';
 $labels['vacation.off'] = 'Non active';
 $labels['vacation.addresses'] = 'Mi adresses de e-mail';
 $labels['vacation.interval'] = 'Intervallo de responsa';
-$labels['vacation.after'] = 'Mitter le regula de vacantias post';
 $labels['vacation.saving'] = 'Salveguarda datos...';
 $labels['vacation.action'] = 'Action pro message entrante';
 $labels['vacation.keep'] = 'Conservar';
 $labels['vacation.discard'] = 'Abandonar';
 $labels['vacation.redirect'] = 'Rediriger a';
 $labels['vacation.copy'] = 'Inviar copia a';
+$labels['forward.redirect'] = 'Rediriger a';
+$labels['forward.copy'] = 'Inviar copia a';
+$labels['forward.on'] = 'Active';
+$labels['forward.off'] = 'Non active';
+$labels['forward.saving'] = 'Salveguarda datos...';
 $labels['filladdresses'] = 'Plenar con tote mi adresses';
 $labels['arialabelfiltersetactions'] = 'Actiones de gruppo de filtros';
 $labels['arialabelfilteractions'] = 'Actiones de filtro';
@@ -191,7 +189,11 @@ $labels['vacationtitle'] = 'Modificar regula de absentia';
 $labels['message'] = 'Message';
 $labels['duplicate'] = 'es duplicate';
 $labels['notduplicate'] = 'non es duplicate';
+$labels['duplicate.handle'] = 'pseudonymo:';
+$labels['duplicate.header'] = 'capite:';
 $labels['duplicate.uniqueid'] = 'identificator:';
+$labels['duplicate.seconds'] = 'expiration (secundas):';
+$labels['duplicate.last'] = 'relative al ultime execution';
 $messages['filterunknownerror'] = 'Error de servitor incognite.';
 $messages['filterconnerror'] = 'Impossibile connecter al servitor.';
 $messages['filterdeleteerror'] = 'Impossibile deler le filtro. Un error de servitor ha occurrite.';
@@ -205,15 +207,6 @@ $messages['actiondeleteconfirm'] = 'Es vos secur de voler deler le action seligi
 $messages['forbiddenchars'] = 'Le campo contine characteres interdicte.';
 $messages['cannotbeempty'] = 'Le campo non pote esser vacue.';
 $messages['ruleexist'] = 'Un filtro con le nomine specificate jam existe.';
-$messages['setactivateerror'] = 'Impossibile activar le gruppo de filtros seligite. Un error de servitor ha occurrite.';
-$messages['setdeactivateerror'] = 'Impossibile disactivar le gruppo de filtros seligite. Un error de servitor ha occurrite.';
-$messages['setdeleteerror'] = 'Impossibile deler le gruppo de filtros seligite. Un error de servitor ha occurrite.';
-$messages['setactivated'] = 'Le gruppo de filtros ha essite activate.';
-$messages['setdeactivated'] = 'Le gruppo de filtros ha essite disactivate.';
-$messages['setdeleted'] = 'Le gruppo de filtros ha essite delite.';
-$messages['setdeleteconfirm'] = 'Es vos secur de voler deler le gruppo de filtros seligite?';
-$messages['setcreateerror'] = 'Impossibile crear le gruppo de filtros. Un error de servitor ha occurrite.';
-$messages['setcreated'] = 'Le gruppo de filtros ha essite create.';
 $messages['activateerror'] = 'Impossibile activar le filtro(s) seligite. Un error de servitor ha occurrite.';
 $messages['deactivateerror'] = 'Impossibile disactivar le filtro(s) seligite. Un error de servitor ha occurrite.';
 $messages['deactivated'] = 'Le filtro(s) ha essite disactivate.';
@@ -226,7 +219,5 @@ $messages['setexist'] = 'Le gruppo jam existe.';
 $messages['nodata'] = 'Al minus un position debe esser seligite.';
 $messages['invaliddateformat'] = 'Le formato del data o del parte de data non es valide';
 $messages['saveerror'] = 'Impossibile salveguardar le datos. Un error de servitor ha occurrite.';
-$messages['vacationsaved'] = 'Le datos del vacantias ha essite salveguardate.';
 $messages['emptyvacationbody'] = 'Le texto del message de vacantias es obligatori.';
 $messages['duplicate.conflict.err'] = 'Ambe le capite e le identificator unic non es permittite.';
-?>

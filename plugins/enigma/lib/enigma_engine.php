@@ -4,12 +4,11 @@
  +-------------------------------------------------------------------------+
  | Engine of the Enigma Plugin                                             |
  |                                                                         |
- | Copyright (C) 2010-2016 The Roundcube Dev Team                          |
+ | Copyright (C) The Roundcube Dev Team                                    |
  |                                                                         |
  | Licensed under the GNU General Public License version 3 or              |
  | any later version with exceptions for skins & plugins.                  |
  | See the README file for a full license statement.                       |
- |                                                                         |
  +-------------------------------------------------------------------------+
  | Author: Aleksander Machniak <alec@alec.pl>                              |
  +-------------------------------------------------------------------------+
@@ -29,6 +28,7 @@ class enigma_engine
     private $pgp_driver;
     private $smime_driver;
     private $password_time;
+    private $cache = array();
 
     public $decryptions     = array();
     public $signatures      = array();
@@ -265,10 +265,6 @@ class enigma_engine
             $recipients = array_merge($recipients, $mime->getRecipients());
         }
 
-        if (empty($recipients)) {
-            return new enigma_error(enigma_error::KEYNOTFOUND);
-        }
-
         $recipients = array_unique($recipients);
 
         // find recipient public keys
@@ -348,7 +344,7 @@ class enigma_engine
         $from    = $from[1];
 
         // find my key
-        if ($from && ($key = $this->find_key($from))) {
+        if ($from && ($key = $this->find_key($from, true))) {
             $pubkey_armor = $this->export_key($key->id);
 
             if (!$pubkey_armor instanceof enigma_error) {
@@ -372,17 +368,36 @@ class enigma_engine
      */
     function part_structure($p, $body = null)
     {
+        static $got_content = false;
+
+        // Prevent from "decryption oracle" [CVE-2019-10740] (#6638)
+        // On mail compose (edit/reply/forward) we support encrypted content only
+        // in the first "content part" of the message.
+        if ($got_content && $this->rc->task == 'mail' && $this->rc->action == 'compose') {
+            return;
+        }
+
+        // Don't be tempted to support encryption in text/html parts
+        // Because of EFAIL vulnerability we should never support this (#6289)
+
         if ($p['mimetype'] == 'text/plain' || $p['mimetype'] == 'application/pgp') {
             $this->parse_plain($p, $body);
+            $got_content = true;
         }
         else if ($p['mimetype'] == 'multipart/signed') {
             $this->parse_signed($p, $body);
+            $got_content = true;
         }
         else if ($p['mimetype'] == 'multipart/encrypted') {
             $this->parse_encrypted($p);
+            $got_content = true;
         }
         else if ($p['mimetype'] == 'application/pkcs7-mime') {
             $this->parse_encrypted($p);
+            $got_content = true;
+        }
+        else {
+            $got_content = $p['structure']->type === 'content';
         }
 
         return $p;
@@ -667,7 +682,7 @@ class enigma_engine
             $sig = $this->pgp_verify($msg_body, $sig_body);
 
             // Store signature data for display
-            $this->signatures[$struct->mime_id] = $sig;
+            $this->signatures[$struct->mime_id]   = $sig;
             $this->signatures[$msg_part->mime_id] = $sig;
         }
     }
@@ -979,6 +994,10 @@ class enigma_engine
      */
     function find_key($email, $can_sign = false)
     {
+        if ($can_sign && array_key_exists($email, $this->cache)) {
+            return $this->cache[$email];
+        }
+
         $this->load_pgp_driver();
         $result = $this->pgp_driver->list_keys($email);
 
@@ -988,13 +1007,25 @@ class enigma_engine
         }
 
         $mode = $can_sign ? enigma_key::CAN_SIGN : enigma_key::CAN_ENCRYPT;
+        $ret  = null;
 
         // check key validity and type
         foreach ($result as $key) {
-            if ($subkey = $key->find_subkey($email, $mode)) {
-                return $key;
+            if (($subkey = $key->find_subkey($email, $mode))
+                && (!$can_sign || $key->get_type() == enigma_key::TYPE_KEYPAIR)
+            ) {
+                $ret = $key;
+                break;
             }
         }
+
+        // cache private key info for better performance
+        // we can skip one list_keys() call when signing and attaching a key
+        if ($can_sign) {
+            $this->cache[$email] = $ret;
+        }
+
+        return $ret;
     }
 
     /**
@@ -1196,6 +1227,11 @@ class enigma_engine
         }
         else {
             $body = $msg->get_part_body($part->mime_id, false);
+
+            // Convert charset to get rid of possible non-ascii characters (#5962)
+            if ($part->charset && stripos($part->charset, 'ASCII') === false) {
+                $body = rcube_charset::convert($body, $part->charset, 'US-ASCII');
+            }
         }
 
         return $body;

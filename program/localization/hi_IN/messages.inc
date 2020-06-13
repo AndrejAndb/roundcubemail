@@ -2,19 +2,18 @@
 
 /*
  +-----------------------------------------------------------------------+
- | localization/<lang>/messages.inc                                      |
- |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/messages/
 */
+
 $messages['errortitle']  = 'एक त्रुटि पाई गई !';
 $messages['loginfailed']  = 'लॉगिन नहीं हो पाया';
 $messages['cookiesdisabled'] = 'आपका ब्राऊसर कुकी स्वीकार नहीं कर रहा है';
@@ -26,7 +25,6 @@ $messages['windowopenerror'] = 'पॉपप विंडो अवरुद्�
 $messages['requesttimedout'] = 'अनुरोध का समय समाप्त';
 $messages['errorreadonly'] = 'कार्य करने में असमर्थ । फ़ोल्डर केवल पढ़ने के लिए है।';
 $messages['nomessagesfound'] = 'इस मेलबॉक्स में कोई मेल नहीं है';
-$messages['loggedout'] = 'सत्र समाप्त. टा टा!';
 $messages['loading'] = 'लोड हो रहा है';
 $messages['loadingdata'] = 'डाटा लोड हो रहा है...';
 $messages['checkingmail'] = 'क्या नया मेल है?...';
@@ -53,7 +51,6 @@ $messages['nopagesizewarning'] = 'पन्ना माप भरें';
 $messages['norecipientwarning'] = 'कम-से-कम एक पाने वाले का पता भरें';
 $messages['nosubjectwarning']  = 'मेल का कोई विशय नहीं बताया गया है। क्या आप विशय डालना चाहते हैं ?';
 $messages['nobodywarning'] = 'बिना कुछ लिखे मेल भेजें?';
-$messages['noldapserver'] = 'खोज के लिये एक ऐलडैप सर्वर चुनें';
 $messages['nosearchname'] = 'पता या पते का नाम भरें';
 $messages['searchsuccessful'] = '$nr मेल मिले';
 $messages['searchnomatch'] = 'खोज असफ़ल';

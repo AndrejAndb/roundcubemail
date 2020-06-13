@@ -2,19 +2,18 @@
 
 /*
  +-----------------------------------------------------------------------+
- | plugins/password/localization/<lang>.inc                              |
- |                                                                       |
  | Localization file of the Roundcube Webmail Password plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-password/
 */
+
 $labels['changepasswd']  = 'Ubah sandi';
 $labels['curpasswd']  = 'Sandi saat ini:';
 $labels['newpasswd']  = 'Sandi Baru:';
@@ -35,3 +34,4 @@ $messages['passwinhistory'] = 'Kata sandi sudah pernah digunakan';
 $messages['samepasswd'] = 'Kata sandi harus berbeda dengan yang sebelumnya';
 $messages['passwdexpirewarning'] = 'Peringatan! Masa kata sandi segera berakhir, ganti sebelum $expirationdatetime.';
 $messages['passwdexpired'] = 'Kata sandi kadaluarsa, harus diganti sekarang.';
+$messages['passwdconstraintviolation'] = 'Kata sandi melanggar aturan. Mungkin kata sandi terlalu lemah.';

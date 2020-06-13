@@ -2,25 +2,28 @@
 
 /*
  +-----------------------------------------------------------------------+
- | plugins/managesieve/localization/<lang>.inc                           |
- |                                                                       |
  | Localization file of the Roundcube Webmail Managesieve plugin         |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-managesieve/
 */
+
+
 $labels['filters'] = 'Filtros';
 $labels['managefilters'] = 'Gerir filtros';
 $labels['filtername'] = 'Nome do filtro';
 $labels['newfilter'] = 'Novo filtro';
 $labels['filteradd'] = 'Adicionar filtro';
 $labels['filterdel'] = 'Eliminar filtro';
+$labels['rules'] = 'Regras';
+$labels['actions'] = 'Ações';
+$labels['scope'] = 'Âmbito';
 $labels['moveup'] = 'Mover para cima';
 $labels['movedown'] = 'Mover para baixo';
 $labels['filterallof'] = 'corresponde a todas as seguintes regras';
@@ -38,6 +41,14 @@ $labels['filterregex'] = 'corresponde à expressão';
 $labels['filternotregex'] = 'não corresponde à expressão';
 $labels['filterunder'] = 'é inferior a';
 $labels['filterover'] = 'é superior a';
+$labels['mime'] = 'MIME:';
+$labels['mimepart'] = 'Parte MIME:';
+$labels['mime-message'] = 'mensagem';
+$labels['mime-anychild'] = 'qualquer';
+$labels['mime-type'] = 'tipo';
+$labels['mime-subtype'] = 'subtipo';
+$labels['mime-contenttype'] = 'tipo de conteúdo';
+$labels['mime-param'] = 'parâmetro';
 $labels['addrule'] = 'Adicionar regra';
 $labels['delrule'] = 'Eliminar regra';
 $labels['messagemoveto'] = 'Mover mensagem para';
@@ -64,21 +75,23 @@ $labels['days'] = 'dias';
 $labels['seconds'] = 'segundos';
 $labels['rulestop'] = 'Parar de avaliar regras';
 $labels['enable'] = 'Activar/Desactivar';
-$labels['filterset'] = 'Filtros definidos';
+$labels['filterset'] = 'Conjunto de filtros';
 $labels['filtersets'] = 'Filtros definidos';
-$labels['filtersetadd'] = 'Adicionar definição de filtros';
-$labels['filtersetdel'] = 'Eliminar definição de filtros actuais';
-$labels['filtersetact'] = 'Activar definição de filtros actuais';
-$labels['filtersetdeact'] = 'Desactivar definição de filtros actuais';
+$labels['filtersetadd'] = 'Adicionar conjunto de filtros';
+$labels['filtersetdel'] = 'Eliminar conjunto de filtros';
+$labels['filtersetact'] = 'Ativar conjunto de filtros atuais';
+$labels['filtersetdeact'] = 'Desativar conjunto de filtros atuais';
 $labels['filterseteditraw'] = 'Editar conjunto de filtros';
+$labels['filtersetswitch'] = 'Ativar/desativar conjunto de filtros';
 $labels['filterdef'] = 'Definição de filtros';
-$labels['filtersetname'] = 'Nome da definição de filtros';
-$labels['newfilterset'] = 'Nova definição de filtros';
+$labels['filtersetname'] = 'Nome do conjunto de filtros';
+$labels['newfilterset'] = 'Novo conjunto de filtros';
 $labels['active'] = 'activo';
 $labels['none'] = 'nehnum';
 $labels['fromset'] = 'definição de';
 $labels['fromfile'] = 'a partir do ficheiro';
 $labels['filterdisabled'] = 'Filtro desactivado';
+$labels['filterenabled'] = 'Filtro activado';
 $labels['countisgreaterthan'] = 'contagem é maior que';
 $labels['countisgreaterthanequal'] = 'contagem é maior ou igual a';
 $labels['countislessthan'] = 'contagem é menor que';
@@ -91,14 +104,26 @@ $labels['valueislessthan'] = 'valor é menor que';
 $labels['valueislessthanequal'] = 'valor é menor ou igual a';
 $labels['valueequals'] = 'valor é igual a';
 $labels['valuenotequals'] = 'o valor não é igual a';
-$labels['setflags'] = 'Definir indicadores para a mensagem';
-$labels['addflags'] = 'Adicionar indicadores para a mensagem';
-$labels['removeflags'] = 'Eliminar indicadores da mensagem';
+$labels['setflags'] = 'Definir sinalizadores para a mensagem';
+$labels['addflags'] = 'Adicionar sinalizadores à mensagem';
+$labels['removeflags'] = 'Eliminar sinalizadores da mensagem';
 $labels['flagread'] = 'Lida';
 $labels['flagdeleted'] = 'Eliminada';
 $labels['flaganswered'] = 'Respondida';
-$labels['flagflagged'] = 'Marcada';
+$labels['flagflagged'] = 'Sinalizada';
 $labels['flagdraft'] = 'Rascunho';
+$labels['addheader'] = 'Adicionar cabeçalho à mensagem';
+$labels['deleteheader'] = 'Remover cabeçalho da mensagem';
+$labels['headername'] = 'Nome do cabeçalho';
+$labels['headervalue'] = 'Valor do cabeçalho';
+$labels['headerpos'] = 'Posição do cabeçalho';
+$labels['headeratstart'] = 'no início';
+$labels['headeratend'] = 'no fim';
+$labels['headeroccurrence'] = 'Ocorrência/posição do cabeçalho';
+$labels['headerfromstart'] = 'do início';
+$labels['headerfromend'] = 'do fim';
+$labels['headerpatterns'] = 'Padrões de valor de cabeçalho';
+$labels['headermatchtype'] = 'tipo de correspondência:';
 $labels['setvariable'] = 'Definir variável';
 $labels['setvarname'] = 'Nome da Variável:';
 $labels['setvarvalue'] = 'Valor da Variável:';
@@ -163,26 +188,34 @@ $labels['asciicasemap'] = 'não sensível a maiúsculas/minúsculas (caracteres 
 $labels['asciinumeric'] = 'numérico (numérico ascii)';
 $labels['index'] = 'índice:';
 $labels['indexlast'] = 'retroceder';
-$labels['vacation'] = 'Férias';
+$labels['vacation'] = 'Ausente do Escritório';
 $labels['vacation.reply'] = 'Mensagem de resposta';
 $labels['vacation.advanced'] = 'Definições avançadas';
 $labels['vacation.from'] = 'Endereço de resposta do remetente';
 $labels['vacation.subject'] = 'Assunto';
 $labels['vacation.body'] = 'Corpo da mensagem';
-$labels['vacation.start'] = 'Início de férias';
-$labels['vacation.end'] = 'Fim de férias';
+$labels['vacation.start'] = 'Hora de início';
+$labels['vacation.end'] = 'Hora de fim';
 $labels['vacation.status'] = 'Estado';
 $labels['vacation.on'] = 'Ligar';
 $labels['vacation.off'] = 'Desligar';
 $labels['vacation.addresses'] = 'Os meus endereços de e-mail';
 $labels['vacation.interval'] = 'Intervalo de resposta';
-$labels['vacation.after'] = 'Coloque regra de férias depois';
+$labels['vacation.after'] = 'Colocar a regra Ausente-do-Escritório depois';
 $labels['vacation.saving'] = 'A guardar dados...';
 $labels['vacation.action'] = 'Acção para mensagem recebida';
 $labels['vacation.keep'] = 'Manter';
 $labels['vacation.discard'] = 'Rejeitar';
 $labels['vacation.redirect'] = 'Redireccionar para';
 $labels['vacation.copy'] = 'Enviar cópia para';
+$labels['forward'] = 'Reencaminhamento';
+$labels['forward.redirect'] = 'Redireccionar para';
+$labels['forward.copy'] = 'Enviar cópia para';
+$labels['forward.on'] = 'Ligar';
+$labels['forward.off'] = 'Desligar';
+$labels['forward.status'] = 'Estado:';
+$labels['forward.action'] = 'Executar a seguinte ação para os mails recebidos:';
+$labels['forward.saving'] = 'A guardar dados...';
 $labels['filladdresses'] = 'Preencher com todos os meus endereços';
 $labels['arialabelfiltersetactions'] = 'Acções do conjunto de filtros';
 $labels['arialabelfilteractions'] = 'Acções dos filtros';
@@ -191,6 +224,7 @@ $labels['ariasummaryfilterslist'] = 'Lista de filtros';
 $labels['ariasummaryfiltersetslist'] = 'Lista de conjuntos de filtros';
 $labels['filterstitle'] = 'Editar filtros de mensagens recebidas';
 $labels['vacationtitle'] = 'Editar regra de ausência do escritório';
+$labels['forwardtitle'] = 'Editar regra de reencaminhamento de mail';
 $labels['message'] = 'Mensagem';
 $labels['duplicate'] = 'é duplicado';
 $labels['notduplicate'] = 'não é duplicado';
@@ -212,15 +246,15 @@ $messages['actiondeleteconfirm'] = 'Tem a certeza que pretende eliminar esta ac�
 $messages['forbiddenchars'] = 'Caracteres inválidos no campo.';
 $messages['cannotbeempty'] = 'Este campo não pode estar vazio.';
 $messages['ruleexist'] = 'Já existe um Filtro com o nome especificado.';
-$messages['setactivateerror'] = 'Não foi possível ativar os filtros selecionados.  Ocorreu um erro no servidor.';
-$messages['setdeactivateerror'] = 'Não foi possível desativar os filtros selecionados.  Ocorreu um erro no servidor.';
-$messages['setdeleteerror'] = 'Não foi possível eliminar os filtros selecionados.  Ocorreu um erro no servidor.';
-$messages['setactivated'] = 'Filtros ativados com sucesso.';
-$messages['setdeactivated'] = 'Filtros desativados com sucesso.';
-$messages['setdeleted'] = 'Filtros eliminados com sucesso.';
-$messages['setupdated'] = 'Conjunto de filtros actualizado com sucesso.';
-$messages['setdeleteconfirm'] = 'Tem a certeza que pretende eliminar os filtros selecionados?';
-$messages['setcreateerror'] = 'Não foi possível criar o conjunto de filtros. Ocorreu um erro no servidor.';
+$messages['setactivateerror'] = 'Não foi possível ativar o conjunto de filtros selecionado. Erro do servidor.';
+$messages['setdeactivateerror'] = 'Não foi possível desativar o conjunto de filtros selecionado. Erro do servidor.';
+$messages['setdeleteerror'] = 'Não foi possível eliminar o conjunto de filtros selecionado. Erro do servidor.';
+$messages['setactivated'] = 'Conjunto de filtros ativado com sucesso.';
+$messages['setdeactivated'] = 'Conjunto de filtros desativado com sucesso.';
+$messages['setdeleted'] = 'Conjunto de filtros eliminado com sucesso.';
+$messages['setupdated'] = 'Conjunto de filtros atualizado com sucesso.';
+$messages['setdeleteconfirm'] = 'Tem a certeza que pretende eliminar o conjunto de filtros selecionado?';
+$messages['setcreateerror'] = 'Não foi possível criar o conjunto de filtros selecionado. Erro do servidor.';
 $messages['setcreated'] = 'Conjunto de filtros criado com sucesso.';
 $messages['activateerror'] = 'Não foi possível ativar os filtros selecionados. Ocorreu um erro no servidor.';
 $messages['deactivateerror'] = 'Não foi possível desativar os filtros selecionados. Ocorreu um erro no servidor.';
@@ -234,7 +268,10 @@ $messages['setexist'] = 'O conjunto já existe.';
 $messages['nodata'] = 'Deve selecionar pelo menos uma posição.';
 $messages['invaliddateformat'] = 'Data ou formato de data inválido.';
 $messages['saveerror'] = 'Não foi possível guardar os dados. Ocorreu um erro no servidor.';
-$messages['vacationsaved'] = 'Dados de férias guardados com sucesso.';
+$messages['vacationsaved'] = 'Regra Ausente-do-Escritório guardada com sucesso.';
+$messages['forwardsaved'] = 'Dados de reencaminhamento guardados com sucesso.';
 $messages['emptyvacationbody'] = 'É necessário o corpo da mensagem de férias!';
 $messages['duplicate.conflict.err'] = 'Ambos, cabeçalho e identificador único, não são permitidos.';
-?>
+$messages['disabledaction'] = 'Ação não permitida.';
+$messages['lastindexempty'] = 'É necessário o índice quando se conta a partir do fim';
+$messages['noflagset'] = 'Deve seleccionar pelo menos um sinalizador.';

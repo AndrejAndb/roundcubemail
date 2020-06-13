@@ -2,14 +2,19 @@
 
 /**
  +-----------------------------------------------------------------------+
- | rcmail_install.php                                                    |
+ | This file is part of the Roundcube Webmail client                     |
  |                                                                       |
- | This file is part of the Roundcube Webmail package                    |
- | Copyright (C) 2008-2016, The Roundcube Dev Team                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
+ |                                                                       |
+ | PURPOSE:                                                              |
+ |   Roundcube Installer                                                 |
+ +-----------------------------------------------------------------------+
+ | Author: Thomas Bruederli <roundcube@gmail.com>                        |
+ | Author: Aleksander Machniak <alec@alec.pl>                            |
  +-----------------------------------------------------------------------+
 */
 
@@ -18,7 +23,6 @@
  *
  * @category Install
  * @package  Webmail
- * @author   Thomas Bruederli
  */
 class rcmail_install
 {
@@ -27,13 +31,15 @@ class rcmail_install
     public $is_post           = false;
     public $failures          = 0;
     public $config            = array();
+    public $defaults          = array();
+    public $comments          = array();
     public $configured        = false;
     public $legacy_config     = false;
     public $email_pattern     = '([a-z0-9][a-z0-9\-\.\+\_]*@[a-z0-9]([a-z0-9\-][.]?)*[a-z0-9])';
     public $bool_config_props = array();
 
     public $local_config    = array('db_dsnw', 'default_host', 'support_url', 'des_key', 'plugins');
-    public $obsolete_config = array('db_backend', 'db_max_length', 'double_auth', 'preview_pane');
+    public $obsolete_config = array('db_backend', 'db_max_length', 'double_auth', 'preview_pane', 'debug_level', 'referer_check');
     public $replaced_config = array(
         'skin_path'            => 'skin',
         'locale_string'        => 'language',
@@ -57,6 +63,11 @@ class rcmail_install
         'Oracle'              => 'oci8',
     );
 
+    /** @var array List of config options with default value change per-release */
+    public $defaults_changes = array(
+        '1.4.0' => array('skin', 'smtp_port', 'smtp_user', 'smtp_pass'),
+        '1.4.1' => array('jquery_ui_skin_map'),
+    );
 
     /**
      * Constructor
@@ -124,6 +135,9 @@ class rcmail_install
             return;
         }
 
+        $config        = array();
+        $rcmail_config = array(); // deprecated var name
+
         include $file;
 
         // read comments from config file
@@ -149,12 +163,7 @@ class rcmail_install
             }
         }
 
-        // deprecated name of config variable
-        if (is_array($rcmail_config)) {
-            return $rcmail_config;
-        }
-
-        return $config;
+        return array_merge(array(), (array) $rcmail_config, (array) $config);
     }
 
     /**
@@ -206,19 +215,10 @@ class rcmail_install
             }
 
             // convert some form data
-            if ($prop == 'debug_level' && !$is_default) {
-                if (is_array($value)) {
-                    $val = 0;
-                    foreach ($value as $dbgval) {
-                        $val += intval($dbgval);
-                    }
-                    $value = $val;
-                }
-            }
-            else if ($prop == 'db_dsnw' && !empty($_POST['_dbtype'])) {
+            if ($prop == 'db_dsnw' && !empty($_POST['_dbtype'])) {
                 if ($_POST['_dbtype'] == 'sqlite') {
                     $value = sprintf('%s://%s?mode=0646', $_POST['_dbtype'],
-                        $_POST['_dbname']{0} == '/' ? '/' . $_POST['_dbname'] : $_POST['_dbname']);
+                        $_POST['_dbname'][0] == '/' ? '/' . $_POST['_dbname'] : $_POST['_dbname']);
                 }
                 else if ($_POST['_dbtype']) {
                     $value = sprintf('%s://%s:%s@%s/%s', $_POST['_dbtype'],
@@ -303,9 +303,11 @@ class rcmail_install
      * Check the current configuration for missing properties
      * and deprecated or obsolete settings
      *
+     * @param string $version Previous version on upgrade
+     *
      * @return array List with problems detected
      */
-    public function check_config()
+    public function check_config($version = null)
     {
         $this->load_config();
 
@@ -384,6 +386,18 @@ class rcmail_install
             }
         }
 
+        if ($version) {
+            $out['defaults'] = array();
+
+            foreach ($this->defaults_changes as $v => $opts) {
+                if (version_compare($v, $version, '>')) {
+                    $out['defaults'] = array_merge($out['defaults'], $opts);
+                }
+            }
+
+            $out['defaults'] = array_unique($out['defaults']);
+        }
+
         return $out;
     }
 
@@ -449,8 +463,22 @@ class rcmail_install
 
         // read reference schema from mysql.initial.sql
         $engine    = $db->db_provider;
-        $db_schema = $this->db_read_schema(INSTALL_PATH . "SQL/$engine.initial.sql");
+        $db_schema = $this->db_read_schema(INSTALL_PATH . "SQL/$engine.initial.sql", $schema_version);
         $errors    = array();
+
+        // Just check the version
+        if ($schema_version) {
+            $version = rcmail_utils::db_version();
+
+            if (empty($version)) {
+                $errors[] = "Schema version not found";
+            }
+            else if ($schema_version != $version) {
+                $errors[] = "Schema version: {$version} (required: {$schema_version})";
+            }
+
+            return !empty($errors) ? $errors : false;
+        }
 
         // check list of tables
         $existing_tables = $db->list_tables();
@@ -466,7 +494,7 @@ class rcmail_install
                 $diff    = array_diff(array_keys($cols), $db_cols);
 
                 if (!empty($diff)) {
-                    $errors[] = "Missing columns in table '$table': " . join(',', $diff);
+                    $errors[] = "Missing columns in table '$table': " . implode(',', $diff);
                 }
             }
         }
@@ -477,18 +505,21 @@ class rcmail_install
     /**
      * Utility function to read database schema from an .sql file
      */
-    private function db_read_schema($schemafile)
+    private function db_read_schema($schemafile, &$version = null)
     {
-        $lines       = file($schemafile);
-        $table_block = false;
-        $schema      = array();
-        $keywords    = array('PRIMARY','KEY','INDEX','UNIQUE','CONSTRAINT','REFERENCES','FOREIGN');
+        $lines      = file($schemafile);
+        $schema     = array();
+        $keywords   = array('PRIMARY','KEY','INDEX','UNIQUE','CONSTRAINT','REFERENCES','FOREIGN');
+        $table_name = null;
 
         foreach ($lines as $line) {
             if (preg_match('/^\s*create table ([\S]+)/i', $line, $m)) {
                 $table_name = explode('.', $m[1]);
                 $table_name = end($table_name);
                 $table_name = preg_replace('/[`"\[\]]/', '', $table_name);
+            }
+            else if (preg_match('/insert into/i', $line) && preg_match('/\'roundcube-version\',\s*\'([0-9]+)\'/', $line, $m)) {
+                $version = $m[1];
             }
             else if ($table_name && ($line = trim($line))) {
                 if ($line == 'GO' || $line[0] == ')' || $line[strlen($line)-1] == ';') {
@@ -519,10 +550,9 @@ class rcmail_install
     {
         $errors = array();
         $files  = array(
-            'skins/larry/images/roundcube_logo.png' => 'image/png',
-            'program/resources/blank.tiff'          => 'image/tiff',
-            'program/resources/blocked.gif'         => 'image/gif',
-            'skins/larry/README'                    => 'text/plain',
+            'program/resources/tinymce/video.png' => 'image/png',
+            'program/resources/blank.tiff'        => 'image/tiff',
+            'program/resources/blocked.gif'       => 'image/gif',
         );
 
         foreach ($files as $path => $expected) {
@@ -570,18 +600,33 @@ class rcmail_install
     }
 
     /**
-     * Return a list with all imap hosts configured
+     * Return a list with all imap/smtp hosts configured
      *
-     * @return array Clean list with imap hosts
+     * @return array Clean list with imap/smtp hosts
      */
-    public function get_hostlist()
+    public function get_hostlist($prop = 'default_host')
     {
-        $default_hosts = (array) $this->getprop('default_host');
-        $out           = array();
+        $hosts     = (array) $this->getprop($prop);
+        $out       = array();
+        $imap_host = '';
 
-        foreach ($default_hosts as $key => $name) {
+        if ($prop == 'smtp_server') {
+            // Set the imap host name for the %h macro
+            $default_hosts = $this->get_hostlist();
+            $imap_host = !empty($default_hosts) ? $default_hosts[0] : '';
+        }
+
+        foreach ($hosts as $key => $name) {
             if (!empty($name)) {
-                $out[] = rcube_utils::parse_host(is_numeric($key) ? $name : $key);
+                if ($prop == 'smtp_server') {
+                    // SMTP host array uses `IMAP host => SMTP host` format
+                    $host = $name;
+                }
+                else {
+                    $host = is_numeric($key) ? $name : $key;
+                }
+
+                $out[] = rcube_utils::parse_host($host, $imap_host);
             }
         }
 
@@ -788,7 +833,7 @@ class rcmail_install
                 }
 
                 if ($isnum) {
-                    return 'array(' . join(', ', array_map(array('rcmail_install', '_dump_var'), $var)) . ')';
+                    return 'array(' . implode(', ', array_map(array('rcmail_install', '_dump_var'), $var)) . ')';
                 }
             }
         }

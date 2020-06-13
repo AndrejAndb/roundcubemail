@@ -4,10 +4,9 @@
  * Test class to test rcube_charset class
  *
  * @package Tests
- * @group iconv
  * @group mbstring
  */
-class Framework_Charset extends PHPUnit_Framework_TestCase
+class Framework_Charset extends PHPUnit\Framework\TestCase
 {
 
     /**

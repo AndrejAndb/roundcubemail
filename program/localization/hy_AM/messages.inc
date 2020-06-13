@@ -2,19 +2,18 @@
 
 /*
  +-----------------------------------------------------------------------+
- | localization/<lang>/messages.inc                                      |
- |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/messages/
 */
+
 $messages['errortitle']  = 'Սխա՛լ';
 $messages['loginfailed']  = 'Մուտքը ձախողվեց';
 $messages['cookiesdisabled'] = 'Сookies–ների ապահովվումը բացակայում է';
@@ -28,7 +27,6 @@ $messages['errorreadonly'] = 'Գործողությունը անհնար է։ Պ�
 $messages['errornoperm'] = 'Գործողության կատարման իրավունքը մերժված է։';
 $messages['invalidrequest'] = 'Սխալ հարցում, ապարդյուն։';
 $messages['nomessagesfound'] = 'Այս փոստարկղում նամակներ չկան';
-$messages['loggedout'] = 'Դուք բարեհաջող ավարտեցիք աշխատանքը։ Ցտեսություն…';
 $messages['loading'] = 'Բեռնում...';
 $messages['uploading'] = 'Ֆայլի վերբեռնում…';
 $messages['uploadingmany'] = 'Վերբեռնվում են ֆայլերը…';
@@ -45,7 +43,6 @@ $messages['blockedimages'] = 'Ձեր անվտանգության համար, այ
 $messages['encryptedmessage'] = 'Ներողություն, այս նամակը կոդավորված է';
 $messages['nocontactsfound'] = 'Հասցեներ չկան';
 $messages['contactnotfound'] = 'Որոնվող հասցեն չգտնվեց';
-$messages['contactsearchonly'] = 'Ներմուծեք տվյալներ անձանց որոնման համար';
 $messages['sendingfailed'] = 'Նամակի ուղարկումը ձախողվեց';
 $messages['senttooquickly'] = 'Խնդրում ենք սպասել $sec վարկյան մինչ այս նամակն ուղարկելը';
 $messages['errormoving'] = 'Նամակի տեղափոխման ձախողում';
@@ -70,7 +67,6 @@ $messages['nopagesizewarning'] = 'Մուտքագրեք էջի չափս';
 $messages['norecipientwarning'] = 'Մուտքագրեք նվազագույնը մեկ հասցեատեր';
 $messages['nosubjectwarning']  = 'Վերնագիր բացակայում է, ցանկանո՞ւմ եք լրացնել';
 $messages['nobodywarning'] = 'Ուղարկե՞լ այս նամակը դատարկ';
-$messages['noldapserver'] = 'Ընտրեք ldap սերվեր որոնման համար';
 $messages['nosearchname'] = 'Մուտքագրեք հասցեատեր կամ էլ. հասցե';
 $messages['notuploadedwarning'] = 'Ոչ բոլոր կցված նյութերն են վերբեռնվել։ Սպասեք կամ ընդհատեք վերբեռնումը։';
 $messages['searchsuccessful'] = 'Գտնվեց $nr նամակ';

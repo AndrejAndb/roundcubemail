@@ -2,10 +2,9 @@
 
 /**
  +-----------------------------------------------------------------------+
- | program/steps/mail/mark.inc                                           |
- |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2014, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -13,7 +12,6 @@
  |                                                                       |
  | PURPOSE:                                                              |
  |   Mark the submitted messages with the specified flag                 |
- |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
@@ -65,12 +63,12 @@ if ($_uids && $flag) {
         $input = array($mbox => '*');
     }
     else {
-        $input = rcmail::get_uids();
+        $input = rcmail::get_uids(null, null, $dummy, rcube_utils::INPUT_POST);
     }
 
     foreach ($input as $mbox => $uids) {
         $marked += (int)$RCMAIL->storage->set_flag($uids, $flag, $mbox);
-        $count += count($uids);
+        $count  += is_array($uids) ? count($uids) : 1;
     }
 
     if (!$marked) {
@@ -88,9 +86,10 @@ if ($_uids && $flag) {
     }
 
     if ($flag == 'DELETED' && $read_deleted && !empty($_POST['_ruid'])) {
-        $ruids = rcube_utils::get_input_value('_ruid', rcube_utils::INPUT_POST);
-        foreach (rcmail::get_uids($ruids) as $mbox => $uids) {
-            $read += (int)$RCMAIL->storage->set_flag($uids, 'SEEN', $mbox);
+        if ($ruids = rcube_utils::get_input_value('_ruid', rcube_utils::INPUT_POST)) {
+            foreach (rcmail::get_uids($ruids) as $mbox => $uids) {
+                $read += (int)$RCMAIL->storage->set_flag($uids, 'SEEN', $mbox);
+            }
         }
 
         if ($read && !$skip_deleted) {
@@ -135,21 +134,14 @@ if ($_uids && $flag) {
                 $jump_back = true;
             }
 
+            foreach ($input as $mbox => $uids) {
+                rcmail_send_unread_count($mbox, true);
+            }
+
             // update message count display
             $OUTPUT->set_env('messagecount', $msg_count);
             $OUTPUT->set_env('current_page', $page);
             $OUTPUT->set_env('pagecount', $pages);
-
-            // update mailboxlist
-            $mbox         = $RCMAIL->storage->get_folder();
-            $unseen_count = $msg_count ? $RCMAIL->storage->count($mbox, 'UNSEEN') : 0;
-            $old_unseen   = rcmail_get_unseen_count($mbox);
-
-            if ($old_unseen != $unseen_count) {
-                $OUTPUT->command('set_unread_count', $mbox, $unseen_count, ($mbox == 'INBOX'));
-                rcmail_set_unseen_count($mbox, $unseen_count);
-            }
-
             $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($msg_count), $mbox);
 
             if ($threading) {
@@ -158,8 +150,11 @@ if ($_uids && $flag) {
 
             // add new rows from next page (if any)
             if ($old_count && $_uids != '*' && ($jump_back || $nextpage_count > 0)) {
-                $a_headers = $RCMAIL->storage->list_messages($mbox, NULL,
-                    rcmail_sort_column(), rcmail_sort_order(), $jump_back ? NULL : $count);
+                // #5862: Don't add more rows than it was on the next page
+                $count = $jump_back ? null : min($nextpage_count, $count);
+
+                $a_headers = $RCMAIL->storage->list_messages($mbox, null,
+                    rcmail_sort_column(), rcmail_sort_order(), $count);
 
                 rcmail_js_message_list($a_headers, false);
             }

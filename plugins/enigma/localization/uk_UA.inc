@@ -2,19 +2,18 @@
 
 /**
  +-----------------------------------------------------------------------+
- | plugins/enigma/localization/<lang>.inc                                |
+ | Localization file of the Roundcube Webmail Enigma plugin              |
  |                                                                       |
- | Localization file of the Roundcube Webmail ACL plugin                 |
- | Copyright (C) 2012-2016, The Roundcube Dev Team                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/roundcube/roundcube-webmail/plugin-enigma/
 */
+
 $labels['encryption'] = 'Шифрування';
 $labels['enigmacerts'] = 'Сертифікати S/MIME';
 $labels['enigmakeys'] = 'PGP-ключі';
@@ -48,9 +47,9 @@ $labels['valid'] = 'дійсний';
 $labels['supportencryption'] = 'Увімкнути шифрування і підписання повідомлень';
 $labels['supportsignatures'] = 'Увімкнути верифікацію підписів повідомленьй';
 $labels['supportdecryption'] = 'Увімкнути розшифрування повідомлень';
-$labels['signdefault'] = 'Підписувати усі листи за замовчуванням';
-$labels['encryptdefault'] = 'Шифрувати усі повідомлення за замовчуванням';
-$labels['attachpubkeydefault'] = 'Приєднати мій публічний PGP ключ по замовчуванню';
+$labels['signdefault'] = 'Типово підписувати усі листи';
+$labels['encryptdefault'] = 'Типово шифрувати усі повідомлення';
+$labels['attachpubkeydefault'] = 'Приєднати мій публічний типовий PGP ключ';
 $labels['passwordtime'] = 'Зберігати паролі приватних ключів';
 $labels['nminutes'] = '$n хвилин(и)';
 $labels['wholesession'] = 'усю сесію';
@@ -63,10 +62,7 @@ $labels['keydisable'] = 'Вимкнути';
 $labels['keyrevoke'] = 'Відкликати';
 $labels['keysend'] = 'Надіслати публічний ключ в повідомленні';
 $labels['keychpass'] = 'Змінити пароль';
-$labels['newkeyident'] = 'Профіль:';
-$labels['newkeypass'] = 'Пароль:';
-$labels['newkeypassconfirm'] = 'Підтвердіть пароль:';
-$labels['newkeysize'] = 'Розмір ключа:';
+$labels['newkeypass'] = 'Пароль';
 $labels['key2048'] = '2048 бітів — дефолтно';
 $labels['key4096'] = '4096 бітів — безпечніше';
 $labels['keygenerating'] = 'Генерування ключів…';
@@ -75,7 +71,6 @@ $labels['encryptmsg'] = 'Шифрувати це повідомлення';
 $labels['signmsg'] = 'Поставити цифровий підпис під повідомленням';
 $labels['enterkeypasstitle'] = 'Введіть фразу-пароль ключа';
 $labels['enterkeypass'] = 'Необхідна фраза-пароль для відімкнення секретного ключа ($keyid) для користувача: $user.';
-$labels['arialabelkeyexportoptions'] = 'Опції експорту ключів';
 $labels['attachpubkeymsg'] = 'Приєднати мій публічний ключ';
 $labels['keyexportprompt'] = 'Бажаєте включити приватні ключі у файл-ключів OpenPGP?';
 $labels['onlypubkeys'] = 'Експортувати публічні ключі';
@@ -83,6 +78,7 @@ $labels['withprivkeys'] = 'Експортувати приватні ключі'
 $labels['findkey'] = 'Пошук по ключовому(вих) серверах';
 $labels['keyimportlabel'] = 'Імпортувати з файлу';
 $labels['keyimportsearchlabel'] = 'Пошук по ключовому(вих) серверах';
+$labels['arialabelkeyexportoptions'] = 'Опції експорту ключів';
 $messages['sigvalid'] = 'Перевірений підпис від $sender.';
 $messages['sigvalidpartial'] = 'Перевірений підпис від $sender, але частина тіла повідомлення не було підписано.';
 $messages['siginvalid'] = 'Недійсний підпис від $sender.';

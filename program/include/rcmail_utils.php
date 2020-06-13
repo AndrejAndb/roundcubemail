@@ -2,10 +2,9 @@
 
 /**
  +-----------------------------------------------------------------------+
- | program/include/rcmail_utils.php                                      |
+ | This file is part of the Roundcube Webmail client                     |
  |                                                                       |
- | This file is part of the Roundcube PHP suite                          |
- | Copyright (C) 2005-2015 The Roundcube Dev Team                        |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -13,7 +12,6 @@
  |                                                                       |
  | CONTENTS:                                                             |
  |   Roundcube utilities                                                 |
- |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  | Author: Aleksander Machniak <alec@alec.pl>                            |
@@ -47,7 +45,7 @@ class rcmail_utils
             $db->db_connect('w');
 
             if (!$db->is_connected()) {
-                rcube::raise_error("Error connecting to database: " . $db->is_error(), false, true);
+                rcube::raise_error("Failed to connect to database", false, true);
             }
 
             self::$db = $db;
@@ -63,9 +61,10 @@ class rcmail_utils
      */
     public static function db_init($dir)
     {
-        $db = self::db();
+        $db    = self::db();
+        $error = null;
+        $file  = $dir . '/' . $db->db_provider . '.initial.sql';
 
-        $file = $dir . '/' . $db->db_provider . '.initial.sql';
         if (!file_exists($file)) {
             rcube::raise_error("DDL file $file not found", false, true);
         }
@@ -114,17 +113,11 @@ class rcmail_utils
 
         // Read DB schema version from database (if 'system' table exists)
         if (in_array($db->table_name('system'), (array)$db->list_tables())) {
-            $db->query("SELECT `value`"
-                . " FROM " . $db->table_name('system', true)
-                . " WHERE `name` = ?",
-                $package . '-version');
-
-            $row     = $db->fetch_array();
-            $version = preg_replace('/[^0-9]/', '', $row[0]);
+            $version = self::db_version($package);
         }
 
         // DB version not found, but release version is specified
-        if (!$version && $ver) {
+        if (empty($version) && $ver) {
             // Map old release version string to DB schema version
             // Note: This is for backward compat. only, do not need to be updated
             $map = array(
@@ -253,6 +246,28 @@ class rcmail_utils
         }
 
         return $db->is_error();
+    }
+
+    /**
+     * Get version string for the specified package
+     *
+     * @param string $package Package name
+     *
+     * @return string Version string
+     */
+    public static function db_version($package = 'roundcube')
+    {
+        $db = self::db();
+
+        $db->query("SELECT `value`"
+            . " FROM " . $db->table_name('system', true)
+            . " WHERE `name` = ?",
+            $package . '-version');
+
+        $row     = $db->fetch_array();
+        $version = preg_replace('/[^0-9]/', '', $row[0]);
+
+        return $version;
     }
 
     /**

@@ -2,10 +2,9 @@
 
 /**
  +-----------------------------------------------------------------------+
- | program/steps/mail/move_del.inc                                       |
- |                                                                       |
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2014, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -13,7 +12,6 @@
  |                                                                       |
  | PURPOSE:                                                              |
  |   Move the submitted messages to a specific mailbox or delete them    |
- |                                                                       |
  +-----------------------------------------------------------------------+
  | Author: Thomas Bruederli <roundcube@gmail.com>                        |
  +-----------------------------------------------------------------------+
@@ -31,7 +29,6 @@ $sources   = array();
 
 if ($_POST['_from'] != 'show') {
     $old_count = $RCMAIL->storage->count(NULL, $threading ? 'THREADS' : 'ALL');
-    $old_pages = ceil($old_count / $RCMAIL->storage->get_pagesize());
 }
 
 // move messages
@@ -39,12 +36,12 @@ if ($RCMAIL->action == 'move' && !empty($_POST['_uid']) && strlen($_POST['_targe
     $target  = rcube_utils::get_input_value('_target_mbox', rcube_utils::INPUT_POST, true);
     $success = true;
 
-    foreach (rcmail::get_uids(null, null, $multifolder) as $mbox => $uids) {
+    foreach (rcmail::get_uids(null, null, $multifolder, rcube_utils::INPUT_POST) as $mbox => $uids) {
         if ($mbox === $target) {
-            $count += count($uids);
+            $count += is_array($uids) ? count($uids) : 1;
         }
         else if ($RCMAIL->storage->move_message($uids, $target, $mbox)) {
-            $count += count($uids);
+            $count += is_array($uids) ? count($uids) : 1;
             $sources[] = $mbox;
         }
         else {
@@ -54,8 +51,10 @@ if ($RCMAIL->action == 'move' && !empty($_POST['_uid']) && strlen($_POST['_targe
 
     if (!$success) {
         // send error message
-        if ($_POST['_from'] != 'show')
+        if ($_POST['_from'] != 'show') {
             $OUTPUT->command('list_mailbox');
+        }
+
         $RCMAIL->display_server_error('errormoving', null, $target == $trash ? 'delete' : '');
         $OUTPUT->send();
     }
@@ -73,16 +72,18 @@ if ($RCMAIL->action == 'move' && !empty($_POST['_uid']) && strlen($_POST['_targe
 }
 // delete messages
 else if ($RCMAIL->action == 'delete' && !empty($_POST['_uid'])) {
-    foreach (rcmail::get_uids(null, null, $multifolder) as $mbox => $uids) {
+    foreach (rcmail::get_uids(null, null, $multifolder, rcube_utils::INPUT_POST) as $mbox => $uids) {
         $del      += (int)$RCMAIL->storage->delete_message($uids, $mbox);
-        $count    += count($uids);
+        $count    += is_array($uids) ? count($uids) : 1;
         $sources[] = $mbox;
     }
 
     if (!$del) {
         // send error message
-        if ($_POST['_from'] != 'show')
+        if ($_POST['_from'] != 'show') {
             $OUTPUT->command('list_mailbox');
+        }
+
         $RCMAIL->display_server_error('errordeleting');
         $OUTPUT->send();
     }
@@ -133,25 +134,20 @@ if ($page > 1 && $remaining == 0) {
     $jump_back = true;
 }
 
-// update message count display
-$OUTPUT->set_env('messagecount', $msg_count);
-$OUTPUT->set_env('current_page', $page);
-$OUTPUT->set_env('pagecount', $pages);
-$OUTPUT->set_env('exists', $exists);
-
-// update mailboxlist
-$unseen_count = $msg_count ? $RCMAIL->storage->count($mbox, 'UNSEEN') : 0;
-$old_unseen   = rcmail_get_unseen_count($mbox);
-
-if ($old_unseen != $unseen_count) {
-    $OUTPUT->command('set_unread_count', $mbox, $unseen_count, ($mbox == 'INBOX'));
-    rcmail_set_unseen_count($mbox, $unseen_count);
+// update unseen messages counts for all involved folders
+foreach ($sources as $source) {
+    rcmail_send_unread_count($source, true);
 }
 
 if ($RCMAIL->action == 'move' && strlen($target)) {
     rcmail_send_unread_count($target, true);
 }
 
+// update message count display
+$OUTPUT->set_env('messagecount', $msg_count);
+$OUTPUT->set_env('current_page', $page);
+$OUTPUT->set_env('pagecount', $pages);
+$OUTPUT->set_env('exists', $exists);
 $OUTPUT->command('set_quota', $RCMAIL->quota_content(null, $multifolder ? $sources[0] : 'INBOX'));
 $OUTPUT->command('set_rowcount', rcmail_get_messagecount_text($msg_count), $mbox);
 
@@ -161,8 +157,11 @@ if ($threading) {
 
 // add new rows from next page (if any)
 if ($addrows && $count && $uids != '*' && ($jump_back || $nextpage_count > 0)) {
+    // #5862: Don't add more rows than it was on the next page
+    $count = $jump_back ? null : min($nextpage_count, $count);
+
     $a_headers = $RCMAIL->storage->list_messages($mbox, NULL,
-        rcmail_sort_column(), rcmail_sort_order(), $jump_back ? NULL : $count);
+        rcmail_sort_column(), rcmail_sort_order(), $count);
 
     rcmail_js_message_list($a_headers, false);
 }

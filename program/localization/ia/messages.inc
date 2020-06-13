@@ -2,19 +2,18 @@
 
 /*
  +-----------------------------------------------------------------------+
- | localization/<lang>/messages.inc                                      |
- |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/messages/
 */
+
 $messages['errortitle']  = 'Un error ha occurrite.';
 $messages['loginfailed']  = 'Apertura de session fallite.';
 $messages['cookiesdisabled'] = 'Vostre navigator non accepta cookies.';
@@ -34,7 +33,6 @@ $messages['erroroverquotadelete'] = 'Nulle spatio libere sur disco. Preme SHIFT+
 $messages['invalidrequest'] = 'Requesta non valide. Le datos non ha essite salveguardate.';
 $messages['invalidhost'] = 'Nomine de servitor non valide.';
 $messages['nomessagesfound'] = 'Nulle message trovate in iste cassa postal.';
-$messages['loggedout'] = 'Vos ha terminate le session. A revider!';
 $messages['mailboxempty'] = 'Le cassa postal es vacue';
 $messages['nomessages'] = 'Nulle message';
 $messages['refreshing'] = 'A refrescar...';
@@ -62,11 +60,8 @@ $messages['nopubkeyforsender'] = 'Nulle clave public valide ha essite trovate pr
 $messages['encryptnoattachments'] = 'Le attachamentos jam incargate non pote esser cryptate. Per favor re-adde los in le editor cryptographic.';
 $messages['searchpubkeyservers'] = 'Vole tu cercar le claves mancante in le servitores de claves public?';
 $messages['encryptpubkeysfound'] = 'Le sequente claves public ha essite trovate:';
-$messages['keyservererror'] = 'Fallimento de obtener clave ab servitor de claves';
-$messages['keyimportsuccess'] = 'Le clave public $key ha essite importate in tu portaclaves';
 $messages['nocontactsfound'] = 'Nulle contacto trovate.';
 $messages['contactnotfound'] = 'Le contacto requestate non ha essite trovate.';
-$messages['contactsearchonly'] = 'Entra parolas a cercar in contactos';
 $messages['sendingfailed'] = 'Le invio del message ha fallite.';
 $messages['senttooquickly'] = 'Per favor, attende $sec secunda(s) ante inviar iste message.';
 $messages['errorsavingsent'] = 'Un error ha occurrite durante le salveguarda del message inviate.';
@@ -92,12 +87,13 @@ $messages['nonamewarning']  = 'Per favor, specifica un nomine.';
 $messages['nopagesizewarning'] = 'Per favor, specifica un dimension de pagina.';
 $messages['nosenderwarning'] = 'Per favor, specifica le adresse de e-mail del expeditor.';
 $messages['norecipientwarning'] = 'Per favor, specifica al minus un destinatario.';
+$messages['disclosedrecipwarning'] = 'Tote le destinatarios videra le adresses de e-mail le unes del alteres. Pro impedir isto e proteger lor confidentialitate, usa le campo Bcc.';
 $messages['disclosedreciptitle'] = 'Il ha troppo de destinatarios public';
 $messages['nosubjectwarning']  = 'Le campo "Subjecto" es vacue. Vole vos specificar un subjecto ora?';
 $messages['nosubjecttitle']  = 'Sin subjecto';
 $messages['nobodywarning'] = 'Inviar iste message sin texto?';
+$messages['notsentwarning'] = 'Le message non ha essite inviate e ha modificationes non salveguardate. Abandonar le modificationes?';
 $messages['restoresavedcomposedata'] = 'Un message anteriormente componite ma non inviate ha essite trovate.\n\nSubjecto: $subject\nSalveguardate: $date\n\nVole vos restaurar iste message?';
-$messages['noldapserver'] = 'Per favor, selige un servitor LDAP in le qual cercar.';
 $messages['nosearchname'] = 'Per favor, specifica le nomine o adresse de e-mail de un contacto.';
 $messages['notuploadedwarning'] = 'Non tote le attachamentos ha ancora essite incargate. Per favor, attende o cancella le incargamento.';
 $messages['searchsuccessful'] = '$nr messages trovate.';
@@ -119,6 +115,7 @@ $messages['filelinkerror'] = 'Le attachamento del file ha fallite.';
 $messages['fileuploaderror'] = 'Incargamento de file falleva.';
 $messages['filesizeerror'] = 'Le file incargate excede le dimension maxime de $size.';
 $messages['filecounterror'] = 'Vos pote incargar al maximo $count files simul.';
+$messages['msgsizeerror'] = 'Le attachamento de un file ha fallite. Le dimension maxime de un message ($size) ha essite excedite.';
 $messages['copysuccess'] = '$nr contactos ha essite copiate.';
 $messages['movesuccess'] = '$nr contactos ha essite displaciate.';
 $messages['copyerror'] = 'Impossibile copiar le contactos.';
@@ -190,7 +187,6 @@ $messages['invalidimageformat'] = 'Non es un formato de imagine valide.';
 $messages['mispellingsfound'] = 'Errores de orthographia ha essite detegite in le message.';
 $messages['parentnotwritable'] = 'Impossibile crear/displaciar le dossier in le dossier genitor seligite. Nulle permission de accesso.';
 $messages['messagetoobig'] = 'Le parte del message es troppo grande pro tractar lo.';
-$messages['attachmentvalidationerror'] = 'ATTENTION! Iste attachamento es suspecte perque su typo non corresponde al typo declarate in le message. Si vos non ha confidentia in le expeditor, vos non deberea aperir lo in le navigator perque illo pote haber contento nocive.<br/><br/><em>Expectate: $expected; trovate: $detected</em>';
 $messages['noscriptwarning'] = 'Attention: Iste servicio webmail require JavaScript. Pro usar lo, per favor activa JavaScript in le configuration de vostre navigator.';
 $messages['messageissent'] = 'Le message ha jam essite inviate ma non ancora salveguardate. Vole tu salveguardar lo ora?';
 $messages['errnotfound'] = 'File non trovate';
@@ -199,6 +195,7 @@ $messages['errfailedrequest'] = 'Requesta fallite';
 $messages['errauthorizationfailed'] = 'Autorisation fallite';
 $messages['errunauthorizedexplain'] = 'Non poteva verificar que tu es autorisate a acceder a iste servicio.';
 $messages['errrequestcheckfailed'] = 'Verification del requesta fallite';
+$messages['errcsrfprotectionexplain'] = "Pro vostre protection, le accesso a iste ressource ha essite securisate contra le falsification de requestas inter sitos (CSRF).\nSi vos vide isto, vos probabilemente non ha claudite session ante de quitar le application web.\n\nOra, un interaction human es requirite pro continuar.";
 $messages['errcontactserveradmin'] = 'Per favor contacta le administrator de tu servitor.';
 $messages['clicktoresumesession'] = 'Clicca hic pro continuar tu session anterior';
 $messages['errcomposesession'] = 'Error del session de composition';

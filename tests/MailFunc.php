@@ -5,7 +5,7 @@
  *
  * @package Tests
  */
-class MailFunc extends PHPUnit_Framework_TestCase
+class MailFunc extends PHPUnit\Framework\TestCase
 {
 
     function setUp()
@@ -22,12 +22,12 @@ class MailFunc extends PHPUnit_Framework_TestCase
     /**
      * Helper method to create a HTML message part object
      */
-    function get_html_part($body)
+    function get_html_part($body = null)
     {
         $part = new rcube_message_part;
         $part->ctype_primary = 'text';
         $part->ctype_secondary = 'html';
-        $part->body = file_get_contents(TESTS_DIR . $body);
+        $part->body = $body ? file_get_contents(TESTS_DIR . $body) : null;
         $part->replaces = array();
         return $part;
     }
@@ -41,14 +41,15 @@ class MailFunc extends PHPUnit_Framework_TestCase
         $part = $this->get_html_part('src/htmlbody.txt');
         $part->replaces = array('ex1.jpg' => 'part_1.2.jpg', 'ex2.jpg' => 'part_1.2.jpg');
 
+        $params = array('container_id' => 'foo');
+
         // render HTML in normal mode
-        $html = rcmail_html4inline(rcmail_print_body($part->body, $part, array('safe' => false)), 'foo');
+        $html = rcmail_html4inline(rcmail_print_body($part->body, $part, array('safe' => false)), $params);
 
         $this->assertRegExp('/src="'.$part->replaces['ex1.jpg'].'"/', $html, "Replace reference to inline image");
         $this->assertRegExp('#background="program/resources/blocked.gif"#', $html, "Replace external background image");
         $this->assertNotRegExp('/ex3.jpg/', $html, "No references to external images");
         $this->assertNotRegExp('/<meta [^>]+>/', $html, "No meta tags allowed");
-        //$this->assertNoPattern('/<style [^>]+>/', $html, "No style tags allowed");
         $this->assertNotRegExp('/<form [^>]+>/', $html, "No form tags allowed");
         $this->assertRegExp('/Subscription form/', $html, "Include <form> contents");
         $this->assertRegExp('/<!-- link ignored -->/', $html, "No external links allowed");
@@ -56,7 +57,7 @@ class MailFunc extends PHPUnit_Framework_TestCase
         $this->assertTrue($GLOBALS['REMOTE_OBJECTS'], "Remote object detected");
 
         // render HTML in safe mode
-        $html2 = rcmail_html4inline(rcmail_print_body($part->body, $part, array('safe' => true)), 'foo');
+        $html2 = rcmail_html4inline(rcmail_print_body($part->body, $part, array('safe' => true)), $params);
 
         $this->assertRegExp('/<style [^>]+>/', $html2, "Allow styles in safe mode");
         $this->assertRegExp('#src="http://evilsite.net/mailings/ex3.jpg"#', $html2, "Allow external images in HTML (safe mode)");
@@ -75,8 +76,11 @@ class MailFunc extends PHPUnit_Framework_TestCase
 
         $this->assertNotRegExp('/src="skins/', $washed, "Remove local references");
         $this->assertNotRegExp('/\son[a-z]+/', $washed, "Remove on* attributes");
+        $this->assertNotContains('onload', $washed, "Handle invalid style");
 
-        $html = rcmail_html4inline($washed, 'foo');
+        $params = array('container_id' => 'foo');
+        $html   = rcmail_html4inline($washed, $params);
+
         $this->assertNotRegExp('/onclick="return rcmail.command(\'compose\',\'xss@somehost.net\',this)"/', $html, "Clean mailto links");
         $this->assertNotRegExp('/alert/', $html, "Remove alerts");
     }
@@ -87,8 +91,9 @@ class MailFunc extends PHPUnit_Framework_TestCase
      */
     function test_html_xss2()
     {
-        $part = $this->get_html_part('src/BID-26800.txt');
-        $washed = rcmail_html4inline(rcmail_print_body($part->body, $part, array('safe' => true)), 'dabody', '', $attr, true);
+        $part   = $this->get_html_part('src/BID-26800.txt');
+        $params = array('container_id' => 'dabody', 'safe' => true);
+        $washed = rcmail_html4inline(rcmail_print_body($part->body, $part, array('safe' => true)), $params);
 
         $this->assertNotRegExp('/alert|expression|javascript|xss/', $washed, "Remove evil style blocks");
         $this->assertNotRegExp('/font-style:italic/', $washed, "Allow valid styles");
@@ -109,8 +114,23 @@ class MailFunc extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test handling of body style attributes
+     */
+    function test_html4inline_body_style()
+    {
+        $html   = '<body background="test" bgcolor="#fff" style="font-size:11px" text="#000"><p>test</p></body>';
+        $params = array('container_id' => 'foo');
+        $html   = rcmail_html4inline($html, $params);
+
+        $this->assertRegExp('/<div style="font-size:11px">/', $html, "Body attributes");
+        $this->assertArrayHasKey('container_attrib', $params, "'container_attrib' param set");
+        $this->assertRegExp('/background-color: #fff;/', $params['container_attrib']['style'], "Body style (bgcolor)");
+        $this->assertRegExp('/background-image: url\(test\)/', $params['container_attrib']['style'], "Body style (background)");
+        $this->assertRegExp('/color: #000/', $params['container_attrib']['style'], "Body style (text)");
+    }
+
+    /**
      * Test washtml class on non-unicode characters (#1487813)
-     * @group iconv
      * @group mbstring
      */
     function test_washtml_utf8()
@@ -119,6 +139,43 @@ class MailFunc extends PHPUnit_Framework_TestCase
         $washed = rcmail_print_body($part->body, $part);
 
         $this->assertRegExp('/<p>(символ|симол)<\/p>/', $washed, "Remove non-unicode characters from HTML message body");
+    }
+
+    /**
+     * Test inserting meta tag with required charset definition
+     */
+    function test_meta_insertion()
+    {
+        $meta = '<meta charset="'.RCUBE_CHARSET.'" />';
+        $args = array(
+            'html_elements' => array('html', 'body', 'meta', 'head'),
+            'html_attribs'  => array('charset'),
+        );
+
+        $body   = '<html><head><meta charset="iso-8859-1_X"></head><body>Test1<br>Test2';
+        $washed = rcmail_wash_html($body, $args);
+        $this->assertContains("<html><head>$meta</head><body>Test1", $washed, "Meta tag insertion (1)");
+
+        $body   = '<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /></head><body>Test1<br>Test2';
+        $washed = rcmail_wash_html($body, $args);
+        $this->assertContains("<html><head>$meta</head><body>Test1", $washed, "Meta tag insertion (2)");
+
+        $body   = 'Test1<br>Test2';
+        $washed = rcmail_wash_html($body, $args);
+        $this->assertTrue(strpos($washed, "<html><head>$meta</head>") === 0, "Meta tag insertion (3)");
+
+        $body   = '<html>Test1<br>Test2';
+        $washed = rcmail_wash_html($body, $args);
+        $this->assertTrue(strpos($washed, "<html><head>$meta</head>") === 0, "Meta tag insertion (4)");
+
+        $body   = '<html><head></head>Test1<br>Test2';
+        $washed = rcmail_wash_html($body, $args);
+        $this->assertTrue(strpos($washed, "<html><head>$meta</head>") === 0, "Meta tag insertion (5)");
+
+        $body   = '<html><head></head><body>Test1<br>Test2<meta charset="utf-8"></body>';
+        $washed = rcmail_wash_html($body, $args);
+        $this->assertTrue(strpos($washed, "<html><head>$meta</head>") === 0, "Meta tag insertion (6)");
+        $this->assertTrue(strpos($washed, "Test2</body>") > 0, "Meta tag insertion (7)");
     }
 
     /**
@@ -143,9 +200,10 @@ class MailFunc extends PHPUnit_Framework_TestCase
     function test_mailto()
     {
         $part = $this->get_html_part('src/mailto.txt');
+        $params = array('container_id' => 'foo');
 
         // render HTML in normal mode
-        $html = rcmail_html4inline(rcmail_print_body($part->body, $part, array('safe' => false)), 'foo');
+        $html = rcmail_html4inline(rcmail_print_body($part->body, $part, array('safe' => false)), $params);
 
         $mailto = '<a href="mailto:me@me.com"'
             .' onclick="return rcmail.command(\'compose\',\'me@me.com?subject=this is the subject&amp;body=this is the body\',this)" rel="noreferrer">e-mail</a>';
@@ -185,86 +243,35 @@ class MailFunc extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test identities selection using Return-Path header
+     * Test link attribute modifications
      */
-    function test_rcmail_identity_select()
+    public function test_html_links()
     {
-        $identities = array(
-            array(
-                'name' => 'Test',
-                'email_ascii' => 'addr@domain.tld',
-                'ident' => 'Test <addr@domain.tld>',
-            ),
-            array(
-                'name' => 'Test',
-                'email_ascii' => 'thing@domain.tld',
-                'ident' => 'Test <thing@domain.tld>',
-            ),
-            array(
-                'name' => 'Test',
-                'email_ascii' => 'other@domain.tld',
-                'ident' => 'Test <other@domain.tld>',
-            ),
-        );
+      // disable relative links
+      $html = '<a href="/">test</a>';
+      $body = rcmail_print_body($html, $this->get_html_part(), array('safe' => false, 'plain' => false));
 
-        $message = new stdClass;
-        $message->headers = new rcube_message_header;
-        $message->headers->set('Return-Path', '<some_thing@domain.tld>');
-        $res = rcmail_identity_select($message, $identities);
+      $this->assertNotContains('href="/"', $body);
+      $this->assertContains('<a>', $body);
 
-        $this->assertSame($identities[0], $res);
+      $html = '<a href="https://roundcube.net">test</a>';
+      $body = rcmail_print_body($html, $this->get_html_part(), array('safe' => false, 'plain' => false));
 
-        $message->headers->set('Return-Path', '<thing@domain.tld>');
-        $res = rcmail_identity_select($message, $identities);
-
-        $this->assertSame($identities[1], $res);
+      // allow external links, add target and noreferrer
+      $this->assertContains('<a href="https://roundcube.net"', $body);
+      $this->assertContains(' target="_blank"', $body);
+      $this->assertContains(' rel="noreferrer"', $body);
     }
 
     /**
-     * Test identities selection (#1489378)
+     * Test potential XSS with invalid attributes
      */
-    function test_rcmail_identity_select2()
+    public function test_html_link_xss()
     {
-        $identities = array(
-            array(
-                'name' => 'Test 1',
-                'email_ascii' => 'addr1@domain.tld',
-                'ident' => 'Test 1 <addr1@domain.tld>',
-            ),
-            array(
-                'name' => 'Test 2',
-                'email_ascii' => 'addr2@domain.tld',
-                'ident' => 'Test 2 <addr2@domain.tld>',
-            ),
-            array(
-                'name' => 'Test 3',
-                'email_ascii' => 'addr3@domain.tld',
-                'ident' => 'Test 3 <addr3@domain.tld>',
-            ),
-            array(
-                'name' => 'Test 4',
-                'email_ascii' => 'addr2@domain.tld',
-                'ident' => 'Test 4 <addr2@domain.tld>',
-            ),
-        );
+      $html = '<a style="x:><img src=x onerror=alert(1)//">test</a>';
+      $body = rcmail_print_body($html, $this->get_html_part(), array('safe' => false, 'plain' => false));
 
-        $message = new stdClass;
-        $message->headers = new rcube_message_header;
-
-        $message->headers->set('From', '<addr2@domain.tld>');
-        $res = rcmail_identity_select($message, $identities);
-        $this->assertSame($identities[1], $res);
-
-        $message->headers->set('From', 'Test 2 <addr2@domain.tld>');
-        $res = rcmail_identity_select($message, $identities);
-        $this->assertSame($identities[1], $res);
-
-        $message->headers->set('From', 'Other <addr2@domain.tld>');
-        $res = rcmail_identity_select($message, $identities);
-        $this->assertSame($identities[1], $res);
-
-        $message->headers->set('From', 'Test 4 <addr2@domain.tld>');
-        $res = rcmail_identity_select($message, $identities);
-        $this->assertSame($identities[3], $res);
+      $this->assertNotContains('onerror=alert(1)//">test', $body);
+      $this->assertContains('<a style="x: &gt;"', $body);
     }
 }

@@ -2,30 +2,32 @@
 
 /*
  +-----------------------------------------------------------------------+
- | plugins/managesieve/localization/<lang>.inc                           |
- |                                                                       |
  | Localization file of the Roundcube Webmail Managesieve plugin         |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-managesieve/
 */
+
+
 $labels['filters'] = 'پالایه‌ها';
 $labels['managefilters'] = 'مدیریت پالایه‌های نامه ورودی';
 $labels['filtername'] = 'نام پالایه';
 $labels['newfilter'] = 'پالایه جدید';
 $labels['filteradd'] = 'افزودن پالایه';
 $labels['filterdel'] = 'حذف پالایه';
+$labels['actions'] = 'اقدام‌ها';
+$labels['scope'] = 'حوزه';
 $labels['moveup'] = 'انتقال به بالا';
 $labels['movedown'] = 'انتقال به پایین';
 $labels['filterallof'] = 'مطابقت همه قوانین ذیل';
 $labels['filteranyof'] = 'مطابقت هر کدام از قوانین ذیل';
-$labels['filterany'] = 'همه پیغام ها';
+$labels['filterany'] = 'همه پیام ها';
 $labels['filtercontains'] = 'دربرگیرنده';
 $labels['filternotcontains'] = 'بدون';
 $labels['filteris'] = 'برابر است با';
@@ -40,37 +42,30 @@ $labels['filterunder'] = 'زیر';
 $labels['filterover'] = 'بالا';
 $labels['addrule'] = 'افزودن قانون';
 $labels['delrule'] = 'حذف قانون';
-$labels['messagemoveto'] = 'انتقال پیغام به';
-$labels['messageredirect'] = 'بازگردانی پیغام به';
-$labels['messagecopyto'] = 'رونوشت پیغام به';
-$labels['messagesendcopy'] = 'ارسال رونوشت پیغام به';
-$labels['messagereply'] = 'پاسخ همراه پیغام';
-$labels['messagedelete'] = 'حذف پیغام';
-$labels['messagediscard'] = 'دور ریختن با پیغام';
-$labels['messagekeep'] = 'پیغام را در صندوق ورودی نگه دار';
+$labels['messagemoveto'] = 'انتقال پیام به';
+$labels['messageredirect'] = 'بازگردانی پیام به';
+$labels['messagecopyto'] = 'رونوشت پیام به';
+$labels['messagesendcopy'] = 'ارسال رونوشت پیام به';
+$labels['messagereply'] = 'پاسخ همراه پیام';
+$labels['messagedelete'] = 'حذف پیام';
+$labels['messagediscard'] = 'دور ریختن با پیام';
+$labels['messagekeep'] = 'پیام را در صندوق ورودی نگه دار';
 $labels['messagesrules'] = 'برای  صندوق ورودی:';
 $labels['messagesactions'] = '...انجام اعمال ذیل:';
 $labels['add'] = 'افزودن';
 $labels['del'] = 'حذف';
 $labels['sender'] = 'فرستنده';
 $labels['recipient'] = 'گیرنده';
-$labels['vacationdays'] = 'پیغام ها در چه مواقعی فرستاده شدند (در روزهای):';
-$labels['vacationinterval'] = 'مواقعی که پیغام‌ها ارسال می‌شوند:';
-$labels['vacationreason'] = 'بدنه پیغام (علت مسافرت):';
-$labels['vacationsubject'] = 'موضوع پیغام:';
+$labels['vacationdays'] = 'پیام ها در چه مواقعی فرستاده شدند (در روزهای):';
+$labels['vacationinterval'] = 'مواقعی که پیام‌ها ارسال می‌شوند:';
+$labels['vacationreason'] = 'بدنه پیام (علت مسافرت):';
+$labels['vacationsubject'] = 'موضوع پیام:';
 $labels['days'] = 'روزها';
 $labels['seconds'] = 'ثانیه‌ها';
 $labels['rulestop'] = 'توقف قوانین ارزیابی';
 $labels['enable'] = 'فعال/غیرفعال‌سازی';
-$labels['filterset'] = 'مجموعه پالایه‌ها';
 $labels['filtersets'] = 'مجموعه‌های پالایه‌ها';
-$labels['filtersetadd'] = 'افزودن مجموعه پالایه‌ها';
-$labels['filtersetdel'] = 'حذف مجموعه پالایه‌های جاری';
-$labels['filtersetact'] = 'فعال کردن مجموعه پالایه‌های جاری';
-$labels['filtersetdeact'] = 'غیرفعال کردن مجموعه پالایه‌های جاری';
 $labels['filterdef'] = 'تعریف پالایه';
-$labels['filtersetname'] = 'نام مجموعه پالایه‌ها';
-$labels['newfilterset'] = 'مجموعه پالایه‌های جدید';
 $labels['active'] = 'فعال';
 $labels['none'] = 'هیچ‌کدام';
 $labels['fromset'] = 'از مجموعه';
@@ -88,9 +83,9 @@ $labels['valueislessthan'] = 'مقدار کمتر است از';
 $labels['valueislessthanequal'] = 'مقدار کمتر یا مساوی است با';
 $labels['valueequals'] = 'مقدار مساوی است با';
 $labels['valuenotequals'] = 'مقدار برابر نیست با';
-$labels['setflags'] = 'انتخاب پرچم‌ها برای پیغام';
-$labels['addflags'] = 'افزودن پرچم‌ها برای پیغام';
-$labels['removeflags'] = 'حذف پرچم‌ها از پیغام';
+$labels['setflags'] = 'انتخاب پرچم‌ها برای پیام';
+$labels['addflags'] = 'افزودن پرچم‌ها برای پیام';
+$labels['removeflags'] = 'حذف پرچم‌ها از پیام';
 $labels['flagread'] = 'خوانده‌‌شده';
 $labels['flagdeleted'] = 'حذف شده';
 $labels['flaganswered'] = 'جواب داده شده';
@@ -159,24 +154,25 @@ $labels['asciicasemap'] = 'حساس به حروه کوچک و بزرگ (ascii-ca
 $labels['asciinumeric'] = 'عددی (ascii-numeric)';
 $labels['index'] = 'فهرست:';
 $labels['indexlast'] = 'به عقب';
-$labels['vacation'] = 'مسافرت';
 $labels['vacation.reply'] = 'پاسخ به یغام';
 $labels['vacation.advanced'] = 'تنظیمات پیشرفته';
 $labels['vacation.subject'] = 'موضوع';
 $labels['vacation.body'] = 'بدنه';
-$labels['vacation.start'] = 'شروع تعطیلی';
-$labels['vacation.end'] = 'پایان تعطیلی';
 $labels['vacation.status'] = 'وضعیت';
 $labels['vacation.on'] = 'روشن';
 $labels['vacation.off'] = 'خاموش';
 $labels['vacation.interval'] = 'فاصله پاسخ';
-$labels['vacation.after'] = 'قرار دادن قانون مسافرت بعد از';
 $labels['vacation.saving'] = 'ذخیره داده‌ها...';
 $labels['vacation.action'] = 'کنش عملکرد ورودی';
 $labels['vacation.keep'] = 'نگه داشتن';
 $labels['vacation.discard'] = 'دور انداختن';
 $labels['vacation.redirect'] = 'بازگردانی به';
 $labels['vacation.copy'] = 'ارسال رونوشت به';
+$labels['forward.redirect'] = 'بازگردانی به';
+$labels['forward.copy'] = 'ارسال رونوشت به';
+$labels['forward.on'] = 'روشن';
+$labels['forward.off'] = 'خاموش';
+$labels['forward.saving'] = 'ذخیره داده‌ها...';
 $labels['arialabelfiltersetactions'] = 'کنش‌های مجموعه پالایه';
 $labels['arialabelfilteractions'] = 'کنش‌های پالایه';
 $labels['arialabelfilterform'] = 'خصوصیات پالایه';
@@ -184,6 +180,7 @@ $labels['ariasummaryfilterslist'] = 'فهرست پالایه‌ها';
 $labels['ariasummaryfiltersetslist'] = 'فهرست مجموعه پالایه‌ها';
 $labels['filterstitle'] = 'ویرایش پالایه‌های پست ورودی';
 $labels['vacationtitle'] = 'ویرایش نقش بیرون از دفتر';
+$labels['duplicate.header'] = 'سربرگ:';
 $messages['filterunknownerror'] = 'خطای سرور نامعلوم.';
 $messages['filterconnerror'] = 'ناتوانی در اتصال به سرور.';
 $messages['filterdeleteerror'] = 'ناتوانی در حذف پالایه. خطای سرور رخ داد.';
@@ -196,15 +193,6 @@ $messages['actiondeleteconfirm'] = 'آیا مطمئن هستید که می خو�
 $messages['forbiddenchars'] = 'حروف ممنوعه در فیلد.';
 $messages['cannotbeempty'] = 'فیلد نمی تواند خالی باشد.';
 $messages['ruleexist'] = 'پالایه با این نام مشخص وجود دارد.';
-$messages['setactivateerror'] = 'ناتوان در فعال کردن مجموعه پالایه‌ها انتخاب شده. خطای سرور رخ داد.';
-$messages['setdeactivateerror'] = 'ناتوان در غیرفعال کردن مجموعه پالایه‌ها انتخاب شده. خطای سرور رخ داد.';
-$messages['setdeleteerror'] = 'ناتوان در حذف مجموعه پالایه‌ها انتخاب شده. خطای سرور رخ داد.';
-$messages['setactivated'] = 'مجموعه پالایه‌ها با کام‌یابی فعال شد.';
-$messages['setdeactivated'] = 'مجموعه پالایه‌ها با کام‌یابی غیرفعال شد.';
-$messages['setdeleted'] = 'مجموعه پالایه‌ها با کام‌یابی حذف شد.';
-$messages['setdeleteconfirm'] = 'آیا مطمئن هستید که می‌خواهید مجموعه پالایه‌ها انتخاب شده را حذف کنید؟';
-$messages['setcreateerror'] = 'ناتوانی در ایجاد مجموعه پالایه‌ها. خطای سرور رخ داد.';
-$messages['setcreated'] = 'مجموعه پالایه‌ها با کام‌یابی ایجاد شد.';
 $messages['activateerror'] = 'ناتوانی در فعال کردن پالایه(های) انتخاب شده. خطای سرور رخ داد.';
 $messages['deactivateerror'] = 'ناتوانی در غیرفعال کردن پالایه(های) انتخاب شده. خطای سرور رخ داد.';
 $messages['deactivated'] = 'پالایه(ها) با کام‌یابی فعال شدند.';
@@ -217,6 +205,4 @@ $messages['setexist'] = 'مجموعه در حال حاضر موجود است.';
 $messages['nodata'] = 'حداقل باید یک موقعیت باید انتخاب شود.';
 $messages['invaliddateformat'] = 'قالب تاریخ اشتباه';
 $messages['saveerror'] = 'ناتوانی در ذخیره اطلاعات. خطای سرور رخ داد.';
-$messages['vacationsaved'] = 'اطلاعات مسافرت با کام‌یابی ذخیره شد.';
-$messages['emptyvacationbody'] = 'متن پیغام تعطیلی لازم است!';
-?>
+$messages['emptyvacationbody'] = 'متن پیام تعطیلی لازم است!';

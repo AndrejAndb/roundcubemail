@@ -2,19 +2,18 @@
 
 /*
  +-----------------------------------------------------------------------+
- | localization/<lang>/messages.inc                                      |
- |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/messages/
 */
+
 $messages['errortitle']  = 'Desila se greška!';
 $messages['loginfailed']  = 'Prijava nije uspjela.';
 $messages['cookiesdisabled'] = 'Vaš preglednik ne prihvata kolačiće.';
@@ -33,7 +32,6 @@ $messages['erroroverquotadelete'] = 'Nema slobodnog prostora. Pritisnite SHIFT+D
 $messages['invalidrequest'] = 'Neispravan zahtjev! Podaci nisu sačuvani.';
 $messages['invalidhost'] = 'Neispravno ime servera.';
 $messages['nomessagesfound'] = 'Nema poruka u ovom sandučetu.';
-$messages['loggedout'] = 'Uspješno ste se odjavili. Doviđenja!';
 $messages['mailboxempty'] = 'Sanduče je prazno';
 $messages['nomessages'] = 'Nema poruka';
 $messages['refreshing'] = 'Osvježavam...';
@@ -55,7 +53,6 @@ $messages['blockedimages'] = 'Zbog zaštite privatnosti, slike sa drugih servera
 $messages['encryptedmessage'] = 'Ova poruka je šifrirana i nije je moguće prikazati. Žao nam je!';
 $messages['nocontactsfound'] = 'Adresar je prazan.';
 $messages['contactnotfound'] = 'Traženi kontakt nije pronađen.';
-$messages['contactsearchonly'] = 'Unesite neki pojam za pretragu';
 $messages['sendingfailed'] = 'Greška pri slanju poruke.';
 $messages['senttooquickly'] = 'Molimo sačekajte $sec sekundi prije slanja ove poruke.';
 $messages['errorsavingsent'] = 'Desila se greška pri snimanju poslane poruke.';
@@ -83,7 +80,6 @@ $messages['norecipientwarning'] = 'Molimo vas da upišete barem jednog primaoca.
 $messages['nosubjectwarning']  = 'Polje \'Naslov\' je prazno. Želite li unijeti naslov?';
 $messages['nobodywarning'] = 'Želite li poslati poruku bez teksta?';
 $messages['restoresavedcomposedata'] = 'Pronađena je prethodno napisana poruka koja nije poslana..\n\nTema:$subject\nSnimljeno: $date\n\nŽelite li vratiti ovu poruku?';
-$messages['noldapserver'] = 'Molimo vas da odaberete LDAP server za pretragu.';
 $messages['nosearchname'] = 'Molimo vas da upišete ime kontakta ili email adresu.';
 $messages['notuploadedwarning'] = 'Neki od priloga još nisu dodani na server. Molimo vas da sačekate ili da otkažete dodavanje.';
 $messages['searchsuccessful'] = 'Broj pronađenih poruka: $nr';
@@ -170,7 +166,6 @@ $messages['invalidimageformat'] = 'Format slike nije ispravan.';
 $messages['mispellingsfound'] = 'Pronađene su pravopisne greške u ovoj poruci.';
 $messages['parentnotwritable'] = 'Nije moguće kreirati/premjestiti folder u odabrani matični folder. Nemate prava pristupa.';
 $messages['messagetoobig'] = 'Dio poruke je prevelik za procesiranje.';
-$messages['attachmentvalidationerror'] = 'UPOZORENJE! Ovaj prilog je sumnjiv zbog toga što se njegov tip ne poklapa s tipom navedenim u poruci. Ako nemate povjerenja u pošiljaova, ne biste trebali da otvarate ovaj prilog u vašem browseru jer bi on mogao da sadrži zlonamjerni sadržaj.<br/><br/><em>Očekivano: $expected; pronađeno: $detected</em>';
 $messages['noscriptwarning'] = 'Upozorenje! Ovom webmail servisu je potreban Javascript! Da biste ga mogli koristiti, prvo je potrebno da omogućite Javascript u postavkama vašeg browsera.';
 $messages['messageissent'] = 'Poruka je već poslana, ali nije sačuvana. Želite li sada da je sačuvate?';
 $messages['errnotfound'] = 'Fajl nije pronađen';

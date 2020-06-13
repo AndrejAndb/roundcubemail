@@ -3,8 +3,9 @@
 /**
  +-----------------------------------------------------------------------+
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2012, The Roundcube Dev Team                       |
- | Copyright (C) 2012, Kolab Systems AG                                  |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
+ | Copyright (C) Kolab Systems AG                                        |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -23,8 +24,6 @@
  *
  * @package    Framework
  * @subpackage Storage
- * @author     Thomas Bruederli <roundcube@gmail.com>
- * @author     Aleksander Machniak <alec@alec.pl>
  */
 abstract class rcube_storage
 {
@@ -79,6 +78,8 @@ abstract class rcube_storage
     const ALREADYEXISTS = 6;
     const NONEXISTENT   = 7;
     const CONTACTADMIN  = 8;
+
+    const DUAL_USE_FOLDERS = 'X-DUAL-USE-FOLDERS';
 
 
     /**
@@ -587,15 +588,15 @@ abstract class rcube_storage
             }
             // get UIDs from current search set
             else {
-                $uids = join(',', $this->search_set->get());
+                $uids = implode(',', $this->search_set->get());
             }
         }
         else {
             if (is_array($uids)) {
-                $uids = join(',', $uids);
+                $uids = implode(',', $uids);
             }
             else if (strpos($uids, ':')) {
-                $uids = join(',', rcube_imap_generic::uncompressMessageSet($uids));
+                $uids = implode(',', rcube_imap_generic::uncompressMessageSet($uids));
             }
 
             if (preg_match('/[^0-9,]/', $uids)) {
@@ -660,10 +661,14 @@ abstract class rcube_storage
      *
      * @param string  $folder    New folder name
      * @param boolean $subscribe True if the newvfolder should be subscribed
+     * @param string  $type      Optional folder type (junk, trash, drafts, sent, archive)
+     * @param boolean $noselect  Make the folder \NoSelect folder by adding hierarchy
+     *                           separator at the end (useful for server that do not support
+     *                           both folders and messages as folder children)
      *
      * @return boolean True on success, False on error
      */
-    abstract function create_folder($folder, $subscribe = false);
+    abstract function create_folder($folder, $subscribe = false, $type = null, $noselect = false);
 
     /**
      * Set a new name to an existing folder
@@ -795,6 +800,26 @@ abstract class rcube_storage
      * @return string Folder name
      */
     abstract function mod_folder($folder, $mode = 'out');
+
+    /**
+     * Check if the folder name is valid
+     *
+     * @param string $folder Folder name (UTF-8)
+     * @param string &$char  First forbidden character found
+     *
+     * @return bool True if the name is valid, False otherwise
+     */
+    public function folder_validate($folder, &$char = null)
+    {
+        $delim = $this->get_hierarchy_delimiter();
+
+        if (strpos($folder, $delim) !== false) {
+            $char = $delim;
+            return false;
+        }
+
+        return true;
+    }
 
     /**
      * Create all folders specified as default

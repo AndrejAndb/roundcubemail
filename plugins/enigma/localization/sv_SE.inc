@@ -2,19 +2,18 @@
 
 /**
  +-----------------------------------------------------------------------+
- | plugins/enigma/localization/<lang>.inc                                |
+ | Localization file of the Roundcube Webmail Enigma plugin              |
  |                                                                       |
- | Localization file of the Roundcube Webmail ACL plugin                 |
- | Copyright (C) 2012-2016, The Roundcube Dev Team                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/roundcube/roundcube-webmail/plugin-enigma/
 */
+
 $labels['encryption'] = 'Kryptering';
 $labels['enigmacerts'] = 'S/MIME-certifikat';
 $labels['enigmakeys'] = 'PGP-nycklar';
@@ -25,6 +24,7 @@ $labels['keyuserid'] = 'Användar-ID';
 $labels['keytype'] = 'Nyckeltyp';
 $labels['fingerprint'] = 'Fingeravtryck';
 $labels['subkeys'] = 'Undernycklar';
+$labels['keyprops'] = 'Nyckelegenskaper';
 $labels['basicinfo'] = 'Grundläggande information';
 $labels['userids'] = 'Ytterligare användare';
 $labels['typepublickey'] = 'offentlig nyckel';
@@ -59,10 +59,11 @@ $labels['importkeys'] = 'Importera nycklar';
 $labels['exportkeys'] = 'Exportera nycklar';
 $labels['keyactions'] = 'Hantera nycklar...';
 $labels['keyremove'] = 'Ta bort';
-$labels['keydisable'] = 'Avaktivera';
+$labels['keydisable'] = 'Inaktivera';
 $labels['keyrevoke'] = 'Upphäv';
 $labels['keysend'] = 'Skicka offentlig nyckel i meddelande';
 $labels['keychpass'] = 'Ändra lösenord';
+$labels['keyadd'] = 'Lägg till nyckel';
 $labels['newkeyident'] = 'Identitet';
 $labels['newkeypass'] = 'Lösenord';
 $labels['newkeypassconfirm'] = 'Bekräfta lösenord';
@@ -73,9 +74,9 @@ $labels['keygenerating'] = 'Skapar nycklar...';
 $labels['encryptionoptions'] = 'Krypteringsalternativ...';
 $labels['encryptmsg'] = 'Kryptera meddelandet';
 $labels['signmsg'] = 'Signera meddelandet';
+$labels['sendunencrypted'] = 'Skicka okrypterat';
 $labels['enterkeypasstitle'] = 'Ange nyckelns lösenord';
 $labels['enterkeypass'] = 'Lösenord behövs för att låsa upp den privata nyckeln ($keyid) för användare $user.';
-$labels['arialabelkeyexportoptions'] = 'Exportalternativ för nycklar';
 $labels['attachpubkeymsg'] = 'Bifoga min offentliga nyckel';
 $labels['keyexportprompt'] = 'Inkludera privata nycklar i den sparade nyckelfilen för OpenPGP?';
 $labels['onlypubkeys'] = 'Exportera endast offentliga nycklar';
@@ -83,6 +84,12 @@ $labels['withprivkeys'] = 'Exportera privata nycklar';
 $labels['findkey'] = 'Sök nyckel på en eller flera servrar';
 $labels['keyimportlabel'] = 'Importera från fil';
 $labels['keyimportsearchlabel'] = 'Sök nyckel på en eller flera servrar';
+$labels['managekeys'] = 'Hantera PGP-nycklar';
+$labels['identitymatchingprivkeys'] = 'Du har $nr passande privata PGP-nycklar lagrade i nyckelringen:';
+$labels['identitynoprivkeys'] = 'Avsändaridentiteten har ännu ingen privat PGP-nyckel lagrad i nyckelringen.';
+$labels['arialabelkeyexportoptions'] = 'Exportalternativ för nycklar';
+$labels['arialabelkeysearchform'] = 'Sökformulär för nycklar';
+$labels['arialabelkeyoptions'] = 'Alternativ för nycklar';
 $messages['sigvalid'] = 'Signatur verifierad för $sender.';
 $messages['sigvalidpartial'] = 'Signatur verifierad för $sender, men meddelandet var delvis osignerat.';
 $messages['siginvalid'] = 'Ogiltig signatur från $sender.';
@@ -92,6 +99,7 @@ $messages['sigerror'] = 'Overifierad signatur. Internt fel.';
 $messages['decryptok'] = 'Meddelandet är dekrypterat.';
 $messages['decrypterror'] = 'Dekrypteringen misslyckades.';
 $messages['decryptnokey'] = 'Dekrypteringen misslyckades. Privat nyckel otillgänglig. Nyckel-ID: $keyid.';
+$messages['decryptnomdc'] = 'Dekryptering behövs inte. Meddelandet är inte skyddat.';
 $messages['decryptbadpass'] = 'Dekrypteringen misslyckades. Fel lösenord.';
 $messages['decryptnopass'] = 'Dekrypteringen misslyckades. Ange nyckelns lösenord.';
 $messages['decryptpartial'] = 'Meddelandet är dekrypterat, men meddelandet var delvis okrypterat.';
@@ -101,6 +109,7 @@ $messages['signbadpass'] = 'Signeringen misslyckades. Fel lösenord.';
 $messages['signnopass'] = 'Signeringen misslyckades. Ange nyckelns lösenord.';
 $messages['encrypterror'] = 'Krypteringen misslyckades.';
 $messages['encryptnokey'] = 'Krypteringen misslyckades. Offentlig nyckel otillgänglig för $email.';
+$messages['encryptnoprivkey'] = 'Krypteringen misslyckades. Offentlig nyckel kunde inte hittas.';
 $messages['nokeysfound'] = 'Inga nycklar hittades.';
 $messages['keynotfound'] = 'Nyckeln hittades inte!';
 $messages['keyopenerror'] = 'Nyckelinformation kunde inte hämtas. Internt fel.';

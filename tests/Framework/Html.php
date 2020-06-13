@@ -5,7 +5,7 @@
  *
  * @package Tests
  */
-class Framework_Html extends PHPUnit_Framework_TestCase
+class Framework_Html extends PHPUnit\Framework\TestCase
 {
 
     /**
@@ -116,6 +116,10 @@ class Framework_Html extends PHPUnit_Framework_TestCase
             array(
                 'expression="test == true ? \' test\' : \'\'" ',
                 array('expression' => 'test == true ? \' test\' : \'\''),
+            ),
+            array(
+                'href="http://domain.tld/страница"',
+                array('href' => 'http://domain.tld/страница'),
             ),
         );
     }

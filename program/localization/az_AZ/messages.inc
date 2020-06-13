@@ -2,19 +2,18 @@
 
 /*
  +-----------------------------------------------------------------------+
- | localization/<lang>/messages.inc                                      |
- |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/messages/
 */
+
 $messages['errortitle']  = 'Xəta baş verdi!';
 $messages['loginfailed']  = 'Giriş uğursuz oldu.';
 $messages['cookiesdisabled'] = 'Sizin brauzer kukiləri qəbul etmir.';
@@ -31,7 +30,6 @@ $messages['erroroverquotadelete'] = 'Boş disk həcmi yoxdur. Məktubu silmək �
 $messages['invalidrequest'] = 'Səhv sorğu! Məlumat yaddaşda qalmadı.';
 $messages['invalidhost'] = 'Səhv server adı.';
 $messages['nomessagesfound'] = 'Poçt qutusunda məktub tapılmadı.';
-$messages['loggedout'] = 'Çıxış uğurlu oldu. Sağ olun!';
 $messages['mailboxempty'] = 'Poçt boşdur';
 $messages['nomessages'] = 'Məktub yoxdur';
 $messages['refreshing'] = 'Yenilənmə...';
@@ -53,7 +51,6 @@ $messages['blockedimages'] = 'Təhlükəsizlik məqsədi ilə şəkillərin yük
 $messages['encryptedmessage'] = 'Məktub şifrələnib və göstərilə bilməz. Server inzibatçısına müraciət edin.';
 $messages['nocontactsfound'] = 'Ünvanlar tapılmadı';
 $messages['contactnotfound'] = 'Tələb olunan ünvan tapılmadı';
-$messages['contactsearchonly'] = 'Kontaqların axtarışı üçün şərti daxil edin';
 $messages['sendingfailed'] = 'Məktub göndərilmədi';
 $messages['senttooquickly'] = 'Məktub göndərmək üçün $sec saniyə gözləmək gərəkir';
 $messages['errorsavingsent'] = 'Göndərilən məktubun saxlanılması zamanı xəta baş verdi.';
@@ -81,7 +78,6 @@ $messages['norecipientwarning'] = 'Lütfən, qəbul edənin ünvanını daxil ed
 $messages['nosubjectwarning']  = '"Mövzu" sahəsi boşdur. Mövzu daxil etmək istəyirsiniz?';
 $messages['nobodywarning'] = 'Məktub boş göndərilsin?';
 $messages['restoresavedcomposedata'] = 'Əvvəlki göndərildi, ancaq göndərilməyən məktub da tapıldı.\n\nSubject: $subject\nSaved: $date\n\nSiz bu məktubu bərpa etmək istəyirsiniz?';
-$messages['noldapserver'] = 'Lütfən, axtarış üçün LDAP server seçin';
 $messages['nosearchname'] = 'Lütfən, ad və ya e-poçt əlavə edin';
 $messages['notuploadedwarning'] = 'Əlavələr tam yüklənilməyib. Gözləyin və ya yükləməni ləğv edin.';
 $messages['searchsuccessful'] = 'Tapılan məktublar: $nr';
@@ -166,5 +162,4 @@ $messages['invalidimageformat'] = 'Şəkil formatı düzgün deyil';
 $messages['mispellingsfound'] = 'Məktubda orfoqrafik səhvlər tapılıb';
 $messages['parentnotwritable'] = 'Qovluğu seçilmiş ana qovluğa köçürmək/yaratmaq alınmır. Giriş hüququ yoxdur.';
 $messages['messagetoobig'] = 'Məktubun bir hissəsi emal üçün böyükdür.';
-$messages['attachmentvalidationerror'] = 'DİQQƏT! Bu qoşma şübhəlidir, çünki məktubda deyilən növlə eyni deyil. Əgər siz göndərə güvənmirsinizsə, brauzerdə bunu açmayın. Tərkibi təhlükəli ola bilər.<br/><br/><em>Expected: $expected; found: $detected</em>';
 $messages['noscriptwarning'] = 'Xəbərdarlıq: Bu vebmeyl xidməti Javascript tələb edir! Funksiyanı istifadə etmək üçün lütfən, brauzerinizin ayarlarında Javascript-i yandırın.';

@@ -2,19 +2,18 @@
 
 /**
  +-----------------------------------------------------------------------+
- | plugins/enigma/localization/<lang>.inc                                |
+ | Localization file of the Roundcube Webmail Enigma plugin              |
  |                                                                       |
- | Localization file of the Roundcube Webmail ACL plugin                 |
- | Copyright (C) 2012-2016, The Roundcube Dev Team                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/roundcube/roundcube-webmail/plugin-enigma/
 */
+
 $labels['encryption'] = 'Criptografação';
 $labels['enigmacerts'] = 'Certificados S/MIME';
 $labels['enigmakeys'] = 'Chaves PGP';
@@ -25,6 +24,7 @@ $labels['keyuserid'] = 'ID do usuário';
 $labels['keytype'] = 'Tipo de chave';
 $labels['fingerprint'] = 'Autenticação digital';
 $labels['subkeys'] = 'Subchaves';
+$labels['keyprops'] = 'Propriedades-chave';
 $labels['basicinfo'] = 'Informação básica';
 $labels['userids'] = 'Usuários adicionais';
 $labels['typepublickey'] = 'chave pública';
@@ -63,19 +63,19 @@ $labels['keydisable'] = 'Desabilitar';
 $labels['keyrevoke'] = 'Revogar';
 $labels['keysend'] = 'Mandar chave pública em uma mensagem';
 $labels['keychpass'] = 'Trocar senha';
-$labels['newkeyident'] = 'identificação:';
-$labels['newkeypass'] = 'Senha:';
-$labels['newkeypassconfirm'] = 'Confirmar senha:';
-$labels['newkeysize'] = 'Tamanho da chave:';
+$labels['newkeyident'] = 'identificação';
+$labels['newkeypass'] = 'Senha';
+$labels['newkeypassconfirm'] = 'Confirme a senha';
+$labels['newkeysize'] = 'Tamanho da chave';
 $labels['key2048'] = '2048 bits - padrão';
 $labels['key4096'] = '4096 bits - maise seguro';
 $labels['keygenerating'] = 'Gerando chaves...';
 $labels['encryptionoptions'] = 'Opções de criptografia...';
 $labels['encryptmsg'] = 'Criptografar essa mensagem';
 $labels['signmsg'] = 'Assinar digitalmente essa mensagem';
+$labels['sendunencrypted'] = 'Enviar não criptografado';
 $labels['enterkeypasstitle'] = 'Digite a frase secreta da chave';
 $labels['enterkeypass'] = 'Uma frase secreta é necessária para desbloquear a chave ($keyid) para o usuário: $user.';
-$labels['arialabelkeyexportoptions'] = 'Opções de exportação das chaves';
 $labels['attachpubkeymsg'] = 'Anexar minha chave pública';
 $labels['keyexportprompt'] = 'Deseja incluir chaves secretas no arquivo de chaves OpenPGP salva?';
 $labels['onlypubkeys'] = 'Exportar somente Chaves Públicas';
@@ -83,6 +83,10 @@ $labels['withprivkeys'] = 'Exportar Chaves Secretas';
 $labels['findkey'] = 'Procurar no(s) servidor(es) de chaves';
 $labels['keyimportlabel'] = 'Importar do arquivo';
 $labels['keyimportsearchlabel'] = 'Procurar no(s) servidor(es) de chaves';
+$labels['managekeys'] = 'Gerenciar chaves PGP';
+$labels['identitymatchingprivkeys'] = 'Você tem $nr chaves PGP guardadas no chaveiro correspondente:';
+$labels['identitynoprivkeys'] = 'A identidade deste emissor ainda não tem uma chave privada PGP armazenada em sua keyring.';
+$labels['arialabelkeyexportoptions'] = 'Opções de exportação das chaves';
 $messages['sigvalid'] = 'Verificar assinatura de $sender.';
 $messages['sigvalidpartial'] = 'Verificar assinatura de $sender, mas parte do corpo não foi assinada.';
 $messages['siginvalid'] = 'Assinatura inválida de $sender.';
@@ -92,13 +96,17 @@ $messages['sigerror'] = 'Assinatura não verificada. Erro interno.';
 $messages['decryptok'] = 'Mensagem descriptografada';
 $messages['decrypterror'] = 'Falha ao descriptografar.';
 $messages['decryptnokey'] = 'Falha ao descriptografar. Chave privada não encontrada. Chave de ID: $keyid.';
+$messages['decryptnomdc'] = 'Descriptografia pulada. A integridade da mensagem não está protegida.';
+$messages['decryptbadpass'] = 'Descriptografia falhou. Senha inválida.';
 $messages['decryptnopass'] = 'Falha ao descriptografar. Senha chave requerida.';
 $messages['decryptpartial'] = 'Mensagem descriptografada, mas parte do corpo não foi encriptado.';
 $messages['signerror'] = 'Assinatura falhou.';
 $messages['signnokey'] = 'Assinatura falhou. Chave privada não encontrada.';
+$messages['signbadpass'] = 'Login falhou. Senha inválida.';
 $messages['signnopass'] = 'Assinatura falhou. Senha chave requerida.';
 $messages['encrypterror'] = 'Falha ao criptografar.';
 $messages['encryptnokey'] = 'Falha ao criptografar. Chave pública não encontrada para $email.';
+$messages['encryptnoprivkey'] = 'Falha ao criptografar. Chave privada não encontrada.';
 $messages['nokeysfound'] = 'Nenhuma chave encontrada';
 $messages['keynotfound'] = 'Chave não encontrada!';
 $messages['keyopenerror'] = 'Não é possível obter informações da chave! Erro interno.';

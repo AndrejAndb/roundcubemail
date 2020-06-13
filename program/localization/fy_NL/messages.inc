@@ -2,19 +2,18 @@
 
 /*
  +-----------------------------------------------------------------------+
- | localization/<lang>/messages.inc                                      |
- |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/messages/
 */
+
 $messages['errortitle']  = 'Der is in flater bard!';
 $messages['loginfailed']  = 'Ynloggen mislearre.';
 $messages['cookiesdisabled'] = 'Jo browser akseptearret gjin koekjes.';
@@ -34,7 +33,6 @@ $messages['erroroverquotadelete'] = 'Gjin frije skiifromte. Brûk Shift + DEL om
 $messages['invalidrequest'] = 'Ûnjildich fersyk! Gjin data waard bewarre.';
 $messages['invalidhost'] = 'Unjildige tsjinner namme.';
 $messages['nomessagesfound'] = 'Gjin berjochten fûn yn dit postfek.';
-$messages['loggedout'] = 'Jo hawwe de sesje mei súkses beëinige. Oant sjen!';
 $messages['mailboxempty'] = 'Postfek is leech';
 $messages['nomessages'] = 'Gjin berjochten';
 $messages['refreshing'] = 'Ferfarskje...';
@@ -62,11 +60,8 @@ $messages['nopubkeyforsender'] = 'Gjin jildich iepenbiere kaai fûn foar jo stjo
 $messages['encryptnoattachments'] = 'Al oanbeane taheaksels kinne net fersifere wurde. Asjebleaft op \'e nij taheakje yn de fersifering bewurker.';
 $messages['searchpubkeyservers'] = 'Wolle jo op publike kaai tsjinners sykje nei de missende kaaien?';
 $messages['encryptpubkeysfound'] = 'De folgjende publike kaaien binne fûn:';
-$messages['keyservererror'] = 'Kaai kin net fan de kaai tsjinner helle wurde';
-$messages['keyimportsuccess'] = 'Publike kaai $key suksesfol ymportearre yn jo kaai ring';
 $messages['nocontactsfound'] = 'Gjin kontakten fûn.';
 $messages['contactnotfound'] = 'De opfrege kontakt waard net fûn.';
-$messages['contactsearchonly'] = 'Fier wat syktermen yn om kontakten te finen';
 $messages['sendingfailed'] = 'Berjocht koe net ferstjoerd wurde.';
 $messages['senttooquickly'] = 'Wachtsje $sec sekonde(n) foar it ferstjoeren fan dit berjocht.';
 $messages['errorsavingsent'] = 'Der barde in flater ûnder it bewarjen fan ferstjoerd berjocht.';
@@ -99,7 +94,6 @@ $messages['nosubjecttitle']  = 'Gjin ûnderwerp';
 $messages['nobodywarning'] = 'Dit berjocht sûnder tekst ferstjoere?';
 $messages['notsentwarning'] = 'It berjocht is net ferstjoerd en hat net-bewarre feroarings. Wolle jo de feroarings fuort smite?';
 $messages['restoresavedcomposedata'] = 'In earder komponearre mar net-ferstjoerd berjocht waard fûn.\n\nSubject: $subject\nSaved: $date\n\nWolle jo dit berjocht weromsette?';
-$messages['noldapserver'] = 'Selektearje in LDAP-tsjinner om troch te sykjen.';
 $messages['nosearchname'] = 'Fier in kontakt namme of e-post adres yn.';
 $messages['notuploadedwarning'] = 'Noch net alle taheaksels binne opladen. Jo kinne wachtsje of it opladen ôfbrekke.';
 $messages['searchsuccessful'] = '$nr berjochten fûn.';
@@ -193,7 +187,6 @@ $messages['invalidimageformat'] = 'Gjin jildich ôfbyldings formaat.';
 $messages['mispellingsfound'] = 'Stavering flaters ûntdutsen yn it berjocht.';
 $messages['parentnotwritable'] = 'Koe map net oanmeitsje/ferhúzje yn selektearre boppelizzende map. Gjin tagong rjochten.';
 $messages['messagetoobig'] = 'It berjocht diel is te grut om te ferwurkjen.';
-$messages['attachmentvalidationerror'] = 'WARSKÔGING! Dit taheaksel wurdt fertocht om\'t it type net oerien komt mei it type ferklearre yn it berjocht. As jo de stjoerder net fertrouwe, moatte jo it net iepenje yn \'e browser om\'t it kweade ynhâld befetsje kin.<br/><br/><Em>Ferwachte: $expected; Fûn: $detected</em>';
 $messages['noscriptwarning'] = 'Warskôging: Dizze webmail tsjinst fereasket Javascript! Om it te brûken moatte jo Javascript ynskeakelje yn jo browser ynstellings.';
 $messages['messageissent'] = 'Dit berjocht wie al ferstjoerd, mar noch net bewarre. Wolle jo it no bewarje?';
 $messages['errnotfound'] = 'Bestân Net Fûn';

@@ -2,25 +2,28 @@
 
 /*
  +-----------------------------------------------------------------------+
- | plugins/managesieve/localization/<lang>.inc                           |
- |                                                                       |
  | Localization file of the Roundcube Webmail Managesieve plugin         |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-managesieve/
 */
+
+
 $labels['filters'] = 'Süzgeçler';
 $labels['managefilters'] = 'Gelen e-posta süzgeçleri yönetimi';
 $labels['filtername'] = 'Süzgeç adı';
 $labels['newfilter'] = 'Yeni süzgeç';
 $labels['filteradd'] = 'Süzgeç ekle';
 $labels['filterdel'] = 'Süzgeci Sil';
+$labels['rules'] = 'Kurallar';
+$labels['actions'] = 'İşlemler';
+$labels['scope'] = 'Kapsam';
 $labels['moveup'] = 'Yukarı taşı';
 $labels['movedown'] = 'Aşağı taşı';
 $labels['filterallof'] = 'Aşağıdaki kuralların hepsine uyan';
@@ -38,6 +41,14 @@ $labels['filterregex'] = 'kurallı ifadeye uyan';
 $labels['filternotregex'] = 'kurallı ifadeye uymayan';
 $labels['filterunder'] = 'altında';
 $labels['filterover'] = 'üzerinde';
+$labels['mime'] = 'MIME:';
+$labels['mimepart'] = 'MIME parçası:';
+$labels['mime-message'] = 'ileti';
+$labels['mime-anychild'] = 'tümü';
+$labels['mime-type'] = 'tür';
+$labels['mime-subtype'] = 'alt tür';
+$labels['mime-contenttype'] = 'içerik türü';
+$labels['mime-param'] = 'parametre';
 $labels['addrule'] = 'Kural ekle';
 $labels['delrule'] = 'Kuralı sil';
 $labels['messagemoveto'] = 'İletiyi şuraya taşı';
@@ -46,7 +57,7 @@ $labels['messagecopyto'] = 'İletiyi şuraya kopyala';
 $labels['messagesendcopy'] = 'İletinin kopyasını şuraya gönder';
 $labels['messagereply'] = 'İletiyle birlikte yanıtla';
 $labels['messagedelete'] = 'İletiyi sil';
-$labels['messagediscard'] = 'İletiyi yoksay';
+$labels['messagediscard'] = 'İletiyi yok say';
 $labels['messagekeep'] = 'İletiyi Gelen Kutusunda tut';
 $labels['messagesrules'] = 'Gelen iletiler için:';
 $labels['messagesactions'] = '...aşağıdaki işlemleri yürüt:';
@@ -54,11 +65,11 @@ $labels['add'] = 'Ekle';
 $labels['del'] = 'Sil';
 $labels['sender'] = 'Gönderici';
 $labels['recipient'] = 'Alıcı';
-$labels['vacationaddr'] = 'E-Posta adreslerim:';
+$labels['vacationaddr'] = 'E-posta adreslerim:';
 $labels['vacationdays'] = 'İleti gönderme sıklığı (gün):';
 $labels['vacationinterval'] = 'İleti gönderme sıklığı:';
 $labels['vacationreason'] = 'İleti gövdesi (tatil nedeni):';
-$labels['vacationfrom'] = 'Yanıt Adresi:';
+$labels['vacationfrom'] = 'Gönderen adresine yanıtla:';
 $labels['vacationsubject'] = 'İleti konusu:';
 $labels['days'] = 'günler';
 $labels['seconds'] = 'saniye';
@@ -67,10 +78,11 @@ $labels['enable'] = 'Etkinleştir/Devre Dışı Bırak';
 $labels['filterset'] = 'Süzgeç kümesi';
 $labels['filtersets'] = 'Süzgeç kümeleri';
 $labels['filtersetadd'] = 'Süzgeç kümesi ekle';
-$labels['filtersetdel'] = 'Geçerli süzgeç kümesini sil';
+$labels['filtersetdel'] = 'Süzgeç kümesini sil';
 $labels['filtersetact'] = 'Geçerli süzgeç kümesini etkinleştir';
 $labels['filtersetdeact'] = 'Geçerli süzgeç kümesini devre dışı bırak';
 $labels['filterseteditraw'] = 'Süzgeç kümesini düzenle';
+$labels['filtersetswitch'] = 'Süzgeç kümesini aç/kapat';
 $labels['filterdef'] = 'Süzgeç tanımı';
 $labels['filtersetname'] = 'Süzgeç kümesi adı';
 $labels['newfilterset'] = 'Yeni süzgeç kümesi ';
@@ -79,18 +91,19 @@ $labels['none'] = 'hiçbiri';
 $labels['fromset'] = 'gönderi seti';
 $labels['fromfile'] = 'gönderici dosya';
 $labels['filterdisabled'] = 'Süzgeç devre dışı';
+$labels['filterenabled'] = 'Süzgeç etkin';
 $labels['countisgreaterthan'] = 'toplamı büyük';
 $labels['countisgreaterthanequal'] = 'toplamı büyük ya da eşit';
 $labels['countislessthan'] = 'toplamı az';
 $labels['countislessthanequal'] = 'toplamı küçük ya da eşit';
 $labels['countequals'] = 'toplamı eşit';
-$labels['countnotequals'] = 'toplamı eşit değil';
+$labels['countnotequals'] = 'sayısı şuna eşit olmayan';
 $labels['valueisgreaterthan'] = 'değeri büyük';
 $labels['valueisgreaterthanequal'] = 'değeri büyük ya da eşit';
 $labels['valueislessthan'] = 'değer az';
 $labels['valueislessthanequal'] = 'değer küçük ya da  eşit';
 $labels['valueequals'] = 'değer eşit';
-$labels['valuenotequals'] = 'değer eşit değil';
+$labels['valuenotequals'] = 'değeri şuna eşit olmayan';
 $labels['setflags'] = 'İletiyi işaretle';
 $labels['addflags'] = 'İletiye işaret ekle';
 $labels['removeflags'] = 'İleti işaretlerini kaldır';
@@ -99,6 +112,18 @@ $labels['flagdeleted'] = 'Silindi';
 $labels['flaganswered'] = 'Yanıtlanmış';
 $labels['flagflagged'] = 'İşaretli';
 $labels['flagdraft'] = 'Taslak';
+$labels['addheader'] = 'İletiye üst bilgi ekle';
+$labels['deleteheader'] = 'İletideki üst bilgiyi kaldır';
+$labels['headername'] = 'Üst bilgi adı';
+$labels['headervalue'] = 'Üst bilgi değeri';
+$labels['headerpos'] = 'Üst bilgi konumu';
+$labels['headeratstart'] = 'üstte';
+$labels['headeratend'] = 'altta';
+$labels['headeroccurrence'] = 'Üst bilgi görüntülenmesi/konumu';
+$labels['headerfromstart'] = 'üstten';
+$labels['headerfromend'] = 'alttan';
+$labels['headerpatterns'] = 'Üst bilgi değeri düzenleri';
+$labels['headermatchtype'] = 'eşleşme türü:';
 $labels['setvariable'] = 'Değişken tanımla';
 $labels['setvarname'] = 'Değişken adı:';
 $labels['setvarvalue'] = 'Değişken değeri:';
@@ -121,14 +146,14 @@ $labels['notifyimportancehigh'] = 'yüksek';
 $labels['notifymethodmailto'] = 'E-posta';
 $labels['notifymethodtel'] = 'Telefon';
 $labels['notifymethodsms'] = 'SMS';
-$labels['filtercreate'] = 'Süzgeç oluştur';
+$labels['filtercreate'] = 'Süzgeç ekle';
 $labels['usedata'] = 'Süzgeçte şu veriler kullanılsın:';
 $labels['nextstep'] = 'Sonraki Adım';
 $labels['...'] = '...';
 $labels['string'] = 'Dizge';
 $labels['currdate'] = 'Geçerli tarih';
 $labels['datetest'] = 'Tarih';
-$labels['dateheader'] = 'Başlık';
+$labels['dateheader'] = 'başlık:';
 $labels['year'] = 'yıl';
 $labels['month'] = 'ay';
 $labels['day'] = 'gün';
@@ -163,26 +188,34 @@ $labels['asciicasemap'] = 'büyük küçük harfe duyarsız (ascii-casemap)';
 $labels['asciinumeric'] = 'sayı (ascii-numeric)';
 $labels['index'] = 'Dizin:';
 $labels['indexlast'] = 'geriye yönelik';
-$labels['vacation'] = 'Tatil';
+$labels['vacation'] = 'Ofis Dışında';
 $labels['vacation.reply'] = 'İletiyi yanıtla';
 $labels['vacation.advanced'] = 'Gelişmiş ayarlar';
-$labels['vacation.from'] = 'Yanıt Adresi';
+$labels['vacation.from'] = 'Gönderen adresine yanıtla';
 $labels['vacation.subject'] = 'Konu';
 $labels['vacation.body'] = 'Metin';
-$labels['vacation.start'] = 'Tatil başlangıcı';
-$labels['vacation.end'] = 'Tatil bitişi';
+$labels['vacation.start'] = 'Başlangıç saati';
+$labels['vacation.end'] = 'Bitiş saati';
 $labels['vacation.status'] = 'Durum';
 $labels['vacation.on'] = 'Etkin';
 $labels['vacation.off'] = 'Devre dışı';
-$labels['vacation.addresses'] = 'E-Posta adreslerim';
+$labels['vacation.addresses'] = 'E-posta adreslerim';
 $labels['vacation.interval'] = 'Yanıt aralığı';
-$labels['vacation.after'] = 'Şundan sonra tatil kuralı koy';
-$labels['vacation.saving'] = 'Veri kaydediliyor...';
+$labels['vacation.after'] = 'Ofis dışında kuralını şunun arkasına koy';
+$labels['vacation.saving'] = 'Veriler kaydediliyor...';
 $labels['vacation.action'] = 'Gelen ileti işlemi';
 $labels['vacation.keep'] = 'Koru';
-$labels['vacation.discard'] = 'Yoksay';
+$labels['vacation.discard'] = 'Yok say';
 $labels['vacation.redirect'] = 'Şuraya yönlendir';
 $labels['vacation.copy'] = 'Şuraya kopya gönder';
+$labels['forward'] = 'İletiliyor';
+$labels['forward.redirect'] = 'Şuraya yönlendir';
+$labels['forward.copy'] = 'Şuraya kopya gönder';
+$labels['forward.on'] = 'Etkin';
+$labels['forward.off'] = 'Devre dışı';
+$labels['forward.status'] = 'Durum:';
+$labels['forward.action'] = 'Gelen e-postalar için şu işlem yürütülsün:';
+$labels['forward.saving'] = 'Veriler kaydediliyor...';
 $labels['filladdresses'] = 'Benim adreslerimle doldur';
 $labels['arialabelfiltersetactions'] = 'Süzgeç kümesi işlemleri';
 $labels['arialabelfilteractions'] = 'Süzgeç işlemleri';
@@ -191,6 +224,7 @@ $labels['ariasummaryfilterslist'] = 'Süzgeç listesi';
 $labels['ariasummaryfiltersetslist'] = 'Süzgeç kümesi listesi';
 $labels['filterstitle'] = 'Gelen e-posta süzgeçlerini düzenle';
 $labels['vacationtitle'] = 'Ofis dışında kuralını düzenle';
+$labels['forwardtitle'] = 'Posta iletme kuralını düzenle';
 $labels['message'] = 'İleti';
 $labels['duplicate'] = 'yinelenen';
 $labels['notduplicate'] = 'yinelenmeyen';
@@ -214,14 +248,14 @@ $messages['cannotbeempty'] = 'Alan boş olamaz';
 $messages['ruleexist'] = 'Aynı adlı bir süzgeç zaten var.';
 $messages['setactivateerror'] = 'Seçilmiş süzgeç kümesi etkinleştirilemedi. Sunucuda bir sorun çıktı.';
 $messages['setdeactivateerror'] = 'Seçilmiş süzgeç kümesi devre dışı bırakılamadı. Sunucuda bir sorun çıktı.';
-$messages['setdeleteerror'] = 'Seçilmiş süzgeç kümeleri silinemedi. Sunucuda bir sorun çıktı.';
+$messages['setdeleteerror'] = 'Seçilmiş süzgeç kümesi silinemedi. Sunucuda bir sorun çıktı.';
 $messages['setactivated'] = 'Süzgeç kümesi etkinleştirildi.';
 $messages['setdeactivated'] = 'Süzgeç kümesi devre dışı bırakıldı.';
 $messages['setdeleted'] = 'Süzgeç kümesi silindi.';
 $messages['setupdated'] = 'Süzgeç kümesi güncellendi.';
-$messages['setdeleteconfirm'] = 'Seçilmiş süzgeç kümelerini silmek istediğinize emin misiniz?';
-$messages['setcreateerror'] = 'Süzgeç kümeleri oluşturulamadı. Sunucuda bir sorun çıktı.';
-$messages['setcreated'] = 'Süzgeç kümesi oluşturuldu.';
+$messages['setdeleteconfirm'] = 'Seçilmiş süzgeç kümesini silmek istediğinize emin misiniz?';
+$messages['setcreateerror'] = 'Süzgeç kümesi eklenemedi. Sunucuda bir sorun çıktı.';
+$messages['setcreated'] = 'Süzgeç kümesi eklendi.';
 $messages['activateerror'] = 'Seçilmiş süzgeç(ler) etkinleştirilemedi. Sunucuda bir sorun çıktı.';
 $messages['deactivateerror'] = 'Seçilmiş süzgeç(ler) devre dışı bırakılamadı. Sunucuda bir sorun çıktı.';
 $messages['deactivated'] = 'Süzgeç(ler) devre dışı bırakıldı.';
@@ -234,7 +268,10 @@ $messages['setexist'] = 'Küme zaten var.';
 $messages['nodata'] = 'En az bir konum seçilmelidir!';
 $messages['invaliddateformat'] = 'Tarih ya da tarih biçimi geçersiz';
 $messages['saveerror'] = 'Veri kaydedilemedi. Sunucuda bir sorun çıktı.';
-$messages['vacationsaved'] = 'Tatil verisi kaydedildi.';
+$messages['vacationsaved'] = 'Ofis dışında verileri kaydedildi.';
+$messages['forwardsaved'] = 'İletim verileri kaydedildi.';
 $messages['emptyvacationbody'] = 'Tatil iletisi metnini yazmalısınız!';
 $messages['duplicate.conflict.err'] = 'Üst bilgi ve tekil belirteç aynı anda kullanılamaz.';
-?>
+$messages['disabledaction'] = 'İşleme izin verilmiyor!';
+$messages['lastindexempty'] = 'Sondan sayılırken dizin gereklidir';
+$messages['noflagset'] = 'En az bir işaret seçilmelidir.';

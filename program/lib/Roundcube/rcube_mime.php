@@ -3,8 +3,9 @@
 /**
  +-----------------------------------------------------------------------+
  | This file is part of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2016, The Roundcube Dev Team                       |
- | Copyright (C) 2011-2016, Kolab Systems AG                             |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
+ | Copyright (C) Kolab Systems AG                                        |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
@@ -23,8 +24,6 @@
  *
  * @package    Framework
  * @subpackage Storage
- * @author     Thomas Bruederli <roundcube@gmail.com>
- * @author     Aleksander Machniak <alec@alec.pl>
  */
 class rcube_mime
 {
@@ -217,9 +216,21 @@ class rcube_mime
 
                 // Decode and join encoded-word's chunks
                 if ($encoding == 'B' || $encoding == 'b') {
-                    // base64 must be decoded a segment at a time
-                    for ($i=0; $i<$count; $i++)
-                        $text .= base64_decode($tmp[$i]);
+                    $rest  = '';
+                    // base64 must be decoded a segment at a time.
+                    // However, there are broken implementations that continue
+                    // in the following word, we'll handle that (#6048)
+                    for ($i=0; $i<$count; $i++) {
+                        $chunk  = $rest . $tmp[$i];
+                        $length = strlen($chunk);
+                        if ($length % 4) {
+                            $length = floor($length / 4) * 4;
+                            $rest   = substr($chunk, $length);
+                            $chunk  = substr($chunk, 0, $length);
+                        }
+
+                        $text .= base64_decode($chunk);
+                    }
                 }
                 else { //if ($encoding == 'Q' || $encoding == 'q') {
                     // quoted printable can be combined and processed at once
@@ -688,7 +699,7 @@ class rcube_mime
      * @param string  $name        File name (with suffix)
      * @param string  $failover    Mime type supplied for failover
      * @param boolean $is_stream   Set to True if $path contains file contents
-     * @param boolean $skip_suffix Set to True if the config/mimetypes.php mappig should be ignored
+     * @param boolean $skip_suffix Set to True if the config/mimetypes.php map should be ignored
      *
      * @return string
      * @author Till Klampaeckel <till@php.net>
@@ -697,27 +708,17 @@ class rcube_mime
      */
     public static function file_content_type($path, $name, $failover = 'application/octet-stream', $is_stream = false, $skip_suffix = false)
     {
-        static $mime_ext = array();
+        $mime_type = null;
+        $config    = rcube::get_instance()->config;
 
-        $mime_type  = null;
-        $config     = rcube::get_instance()->config;
-        $mime_magic = $config->get('mime_magic');
-
-        if (!$skip_suffix && empty($mime_ext)) {
-            foreach ($config->resolve_paths('mimetypes.php') as $fpath) {
-                $mime_ext = array_merge($mime_ext, (array) @include($fpath));
-            }
-        }
-
-        // use file name suffix with hard-coded mime-type map
-        if (!$skip_suffix && is_array($mime_ext) && $name) {
-            if ($suffix = substr($name, strrpos($name, '.')+1)) {
-                $mime_type = $mime_ext[strtolower($suffix)];
-            }
+        // Detect mimetype using filename extension
+        if (!$skip_suffix) {
+            $mime_type = self::file_ext_type($name);
         }
 
         // try fileinfo extension if available
         if (!$mime_type && function_exists('finfo_open')) {
+            $mime_magic = $config->get('mime_magic');
             // null as a 2nd argument should be the same as no argument
             // this however is not true on all systems/versions
             if ($mime_magic) {
@@ -728,10 +729,8 @@ class rcube_mime
             }
 
             if ($finfo) {
-                if ($is_stream)
-                    $mime_type = finfo_buffer($finfo, $path);
-                else
-                    $mime_type = finfo_file($finfo, $path);
+                $func      = $is_stream ? 'finfo_buffer' : 'finfo_file';
+                $mime_type = $func($finfo, $path, FILEINFO_MIME_TYPE);
                 finfo_close($finfo);
             }
         }
@@ -745,13 +744,34 @@ class rcube_mime
         if (!$mime_type) {
             $mime_type = $failover;
         }
-        else {
-            // Sometimes (PHP-5.3?) content-type contains charset definition,
-            // Remove it (#1487122) also "charset=binary" is useless
-            $mime_type = array_shift(preg_split('/[; ]/', $mime_type));
-        }
 
         return $mime_type;
+    }
+
+    /**
+     * File type detection based on file name only.
+     *
+     * @param string $filename Path to the file or file contents
+     *
+     * @return string|null Mimetype label
+     */
+    public static function file_ext_type($filename)
+    {
+        static $mime_ext = array();
+
+        if (empty($mime_ext)) {
+            foreach (rcube::get_instance()->config->resolve_paths('mimetypes.php') as $fpath) {
+                $mime_ext = array_merge($mime_ext, (array) @include($fpath));
+            }
+        }
+
+        // use file name suffix with hard-coded mime-type map
+        if (!empty($mime_ext) && $filename) {
+            $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+            if ($ext && !empty($mime_ext[$ext])) {
+                return $mime_ext[$ext];
+            }
+        }
     }
 
     /**
@@ -837,6 +857,8 @@ class rcube_mime
             'image/jpg'      => array('jpg', 'jpeg', 'jpe'),
             'image/pjpeg'    => array('jpg', 'jpeg', 'jpe'),
             'image/tiff'     => array('tif'),
+            'image/bmp'      => array('bmp'),
+            'image/x-ms-bmp' => array('bmp'),
             'message/rfc822' => array('eml'),
             'text/x-mail'    => array('eml'),
         );
@@ -886,5 +908,38 @@ class rcube_mime
         }
 
         return implode('@', $parts);
+    }
+
+    /**
+     * Fix mimetype name.
+     *
+     * @param string $type Mimetype
+     *
+     * @return string Mimetype
+     */
+    public static function fix_mimetype($type)
+    {
+        $type    = strtolower(trim($type));
+        $aliases = array(
+            'image/x-ms-bmp' => 'image/bmp',        // #4771
+            'pdf'            => 'application/pdf',  // #6816
+        );
+
+        if ($alias = $aliases[$type]) {
+            return $alias;
+        }
+
+        // Some versions of Outlook create garbage Content-Type:
+        // application/pdf.A520491B_3BF7_494D_8855_7FAC2C6C0608
+        if (preg_match('/^application\/pdf.+/', $type)) {
+            return 'application/pdf';
+        }
+
+        // treat image/pjpeg (image/pjpg, image/jpg) as image/jpeg (#4196)
+        if (preg_match('/^image\/p?jpe?g$/', $type)) {
+            return 'image/jpeg';
+        }
+
+        return $type;
     }
 }

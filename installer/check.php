@@ -1,5 +1,19 @@
 <?php
 
+/**
+ +-----------------------------------------------------------------------+
+ | This file is part of the Roundcube Webmail client                     |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
+ |                                                                       |
+ | Licensed under the GNU General Public License version 3 or            |
+ | any later version with exceptions for skins & plugins.                |
+ | See the README file for a full license statement.                     |
+ +-----------------------------------------------------------------------+
+ | Author: Thomas Bruederli <roundcube@gmail.com>                        |
+ +-----------------------------------------------------------------------+
+*/
+
 if (!class_exists('rcmail_install', false) || !is_object($RCI)) {
     die("Not allowed! Please open installer/index.php instead.");
 }
@@ -17,14 +31,18 @@ $required_php_exts = array(
     'PDO'       => 'PDO',
     'Multibyte' => 'mbstring',
     'OpenSSL'   => 'openssl',
+    'Filter'    => 'filter',
+    'Ctype'     => 'ctype',
 );
 
 $optional_php_exts = array(
     'FileInfo'  => 'fileinfo',
-    'Libiconv'  => 'iconv',
     'Intl'      => 'intl',
     'Exif'      => 'exif',
     'LDAP'      => 'ldap',
+    'GD'        => 'gd',
+    'Imagick'   => 'imagick',
+    'Zip'       => 'zip',
 );
 
 $required_libs = array(
@@ -57,7 +75,6 @@ $source_urls = array(
     'Session'   => 'http://www.php.net/manual/en/book.session.php',
     'PCRE'      => 'http://www.php.net/manual/en/book.pcre.php',
     'FileInfo'  => 'http://www.php.net/manual/en/book.fileinfo.php',
-    'Libiconv'  => 'http://www.php.net/manual/en/book.iconv.php',
     'Multibyte' => 'http://www.php.net/manual/en/book.mbstring.php',
     'OpenSSL'   => 'http://www.php.net/manual/en/book.openssl.php',
     'JSON'      => 'http://www.php.net/manual/en/book.json.php',
@@ -67,6 +84,11 @@ $source_urls = array(
     'oci8'      => 'http://www.php.net/manual/en/book.oci8.php',
     'PDO'       => 'http://www.php.net/manual/en/book.pdo.php',
     'LDAP'      => 'http://www.php.net/manual/en/book.ldap.php',
+    'GD'        => 'http://www.php.net/manual/en/book.image.php',
+    'Imagick'   => 'http://www.php.net/manual/en/book.imagick.php',
+    'Zip'       => 'http://www.php.net/manual/en/book.zip.php',
+    'Filter'    => 'http://www.php.net/manual/en/book.filter.php',
+    'Ctype'     => 'http://www.php.net/manual/en/book.ctype.php',
     'pdo_mysql'   => 'http://www.php.net/manual/en/ref.pdo-mysql.php',
     'pdo_pgsql'   => 'http://www.php.net/manual/en/ref.pdo-pgsql.php',
     'pdo_sqlite'  => 'http://www.php.net/manual/en/ref.pdo-sqlite.php',

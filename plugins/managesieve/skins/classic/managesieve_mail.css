@@ -1,5 +1,5 @@
 #messagemenu li a.filterlink {
-  background-image: url(images/filter.png?v=b0fe.547);
+  background-image: url(images/filter.png);
   background-position: 7px 1px;
 }
 
@@ -51,12 +51,10 @@
   font-weight: bold;
 }
 
-#managesieve-tip
-{
+#managesieve-tip {
   z-index: 100000;
 }
 
-span.sieve.error
-{
+span.sieve.error {
   color: red;
 }

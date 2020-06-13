@@ -2,19 +2,18 @@
 
 /*
  +-----------------------------------------------------------------------+
- | plugins/password/localization/<lang>.inc                              |
- |                                                                       |
  | Localization file of the Roundcube Webmail Password plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-password/
 */
+
 $labels['changepasswd']  = 'Cambiar contrasigno';
 $labels['curpasswd']  = 'Contrasigno actual:';
 $labels['newpasswd']  = 'Nove contrasigno:';
@@ -32,6 +31,7 @@ $messages['passwordforbidden'] = 'Le contrasigno contine characteres interdicte.
 $messages['firstloginchange'] = 'Iste es vostre prime session. Per favor, cambia vostre contrasigno.';
 $messages['disablednotice'] = 'Le systema es sub mantenentia e non es possibile cambiar le contrasigno in iste momento. Le systema retornara al functionamento normal bentosto. Nos offere nostre excusas pro omne inconveniente.';
 $messages['passwinhistory'] = 'Iste contrasigno jam esseva usate previemente.';
-$messages['samepasswd'] = 'Un nove contrasigno debe esser differente del vetule.';
+$messages['samepasswd'] = 'Un nove contrasigno debe esser differente del ancian.';
 $messages['passwdexpirewarning'] = 'Attention! Vostre contrasigno expirara proximemente, cambia lo ante $expirationdatetime.';
 $messages['passwdexpired'] = 'Vostre contrasigno ha expirate, vos debe cambiar lo ora!';
+$messages['passwdconstraintviolation'] = 'Le contrasigno non satisface le requisitos. Probabilemente es troppo insecur.';

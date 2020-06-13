@@ -1,7 +1,7 @@
 /**
  * Roundcube webmail styles for the Email section
  *
- * Copyright (c) 2012-2017, The Roundcube Dev Team
+ * Copyright (c) The Roundcube Dev Team
  * Screendesign by FLINT / Büro für Gestaltung, bueroflint.com
  *
  * The contents are subject to the Creative Commons Attribution-ShareAlike
@@ -51,7 +51,6 @@ html.ie #mailview-top {
 	right: 0;
 	height: 0;
 	border-radius: 4px;
-	border-top: none;
 }
 
 #composeview-right #mailview-bottom {
@@ -134,10 +133,6 @@ a.iconbutton.threadmode.selected {
 
 #mailboxlist > li:first-child {
 	border-top: 0;
-}
-
-html.mozilla #mailboxlist > li:first-child {
-	border-radius: 4px 4px 0 0;
 }
 
 .folderlist li.mailbox.unread > a {
@@ -406,7 +401,7 @@ table.messagelist.fixedcopy {
 }
 
 /* thread parent message with flagged children */
-.messagelist tbody tr.flaggedroot .flag span {
+.messagelist tr.flaggedroot td.flag span.unflagged {
 	background-position: -23px -1076px;
 }
 
@@ -971,6 +966,7 @@ div.message-partheaders .headers-table td.header {
 
 #messagebody p.image-attachment .image-filesize {
 	padding-right: 1em;
+	white-space: nowrap;
 }
 
 #messagebody p.image-attachment .attachment-links a {
@@ -1012,6 +1008,18 @@ div.message-partheaders .headers-table td.header {
 #messagepartheader table td.title {
 	width: 60px;
 	padding-right: 0;
+}
+
+.subject .flag-icon {
+	display: none;
+}
+
+body.status-flagged .flag-icon {
+	display: inline-block;
+	background: url(images/listicons.png) 0 -1038px no-repeat;
+	width: 20px;
+	height: 16px;
+	vertical-align: text-top;
 }
 
 
@@ -1164,9 +1172,16 @@ div.message-partheaders .headers-table td.header {
 }
 
 .compose-headers td.title {
-	width: 11%;
+	width: 10%;
 	white-space: nowrap;
 	padding-left: 6px;
+	min-width: 60px;
+	line-height: 16px;
+}
+
+.compose-headers td.top {
+	vertical-align: top;
+	padding-top: 5px;
 }
 
 .compose-headers td.title label {
@@ -1193,15 +1208,14 @@ div.message-partheaders .headers-table td.header {
 	padding: 0 4px;
 }
 
-.compose-headers td.top {
-	vertical-align: top;
-	padding-top: 10px;
-}
-
 .compose-headers td textarea,
 .compose-headers td input {
 	width: 100%;
 	resize: none;
+}
+
+.compose-headers td.bounceopts {
+	padding-top: 20px;
 }
 
 #compose-cc, #compose-bcc, #compose-replyto, #compose-followupto {
@@ -1255,7 +1269,6 @@ div.message-partheaders .headers-table td.header {
 
 #composebodycontainer.mailvelope > iframe[scrolling='no'] {
 	position: relative;
-	top: -12px;
 }
 
 #composebody {
@@ -1292,6 +1305,7 @@ div.message-partheaders .headers-table td.header {
 	overflow: auto;
 }
 
+#image-selector.droptarget,
 #compose-attachments.droptarget {
 	background-image: url(images/filedrop.png);
 	background-position: center bottom;
@@ -1332,8 +1346,7 @@ div.message-partheaders .headers-table td.header {
 }
 
 #composebodycontainer .mce-panel {
-	border-color: #ccc !important;
-	background: #f0f0f0;
+	border-color: #ddd !important;
 }
 
 #composebody_toolbargroup {

@@ -2,25 +2,23 @@
 
 /*
  +-----------------------------------------------------------------------+
- | localization/<lang>/messages.inc                                      |
- |                                                                       |
  | Localization file of the Roundcube Webmail client                     |
- | Copyright (C) 2005-2015, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/messages/
 */
+
 $messages['loginfailed']  = 'ننوتنه په بري سره ترسره نه شوه';
 $messages['cookiesdisabled'] = 'ستاسو لټوني ککوړي ونه منل';
 $messages['sessionerror'] = 'ستاسې ناسته ناباوري يا له مينځه تللې ده';
 $messages['storageerror'] = 'له ای ميپ سرور سره پيوستون په بري سره ترسره نه شو';
 $messages['nomessagesfound'] = 'ليکبکس کې هېڅ استوزي ونه مونده';
-$messages['loggedout'] = 'تاسې له ناستې څخه په بشپړه توګه وويستل شوئ الله په امان';
 $messages['loading'] = 'د کار په حال کې';
 $messages['loadingdata'] = 'اومتوک د کار په حال کې';
 $messages['checkingmail'] = 'نوي استوزي ګوري';
@@ -51,7 +49,6 @@ $messages['nopagesizewarning'] = 'مهرباني‌وکړئ د پاڼې کچه �
 $messages['norecipientwarning'] = 'مهرباني‌وکړئ لږ تر لږه يو ترلاسه کوونکی وليکئ';
 $messages['nosubjectwarning']  = 'د مضمون ډګر تش دی يا تاسو غواړئ چې همدا اوس يو له هغو څخه وليکئ';
 $messages['nobodywarning'] = 'دا استوزه پرته له متن څخه استوئ؟';
-$messages['noldapserver'] = 'مهرباني وکړئ يو ال ډپ سرور د پلټلو لپاره وټاکئ';
 $messages['nosearchname'] = 'مهرباني وکړئ  د يو اړيکلوري‌نوم يا برېښناليک پته وليکئ';
 $messages['searchsuccessful'] = 'استوزي ومونده$';
 $messages['searchnomatch'] = 'د پلټلو بيا راګرځېدل هېڅ سمون ونه خوړه';

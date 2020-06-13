@@ -2,19 +2,18 @@
 
 /*
  +-----------------------------------------------------------------------+
- | plugins/password/localization/<lang>.inc                              |
- |                                                                       |
  | Localization file of the Roundcube Webmail Password plugin            |
- | Copyright (C) 2012-2013, The Roundcube Dev Team                       |
+ |                                                                       |
+ | Copyright (C) The Roundcube Dev Team                                  |
  |                                                                       |
  | Licensed under the GNU General Public License version 3 or            |
  | any later version with exceptions for skins & plugins.                |
  | See the README file for a full license statement.                     |
- |                                                                       |
  +-----------------------------------------------------------------------+
 
  For translation see https://www.transifex.com/projects/p/roundcube-webmail/resource/plugin-password/
 */
+
 $labels['changepasswd']  = 'Passwort ändern';
 $labels['curpasswd']  = 'Aktuelles Passwort';
 $labels['newpasswd']  = 'Neues Passwort';
@@ -35,3 +34,4 @@ $messages['passwinhistory'] = 'Dieses Passwort wurde bereits einmal verwendet.';
 $messages['samepasswd'] = 'Das neue Passwort muss sich von dem Alten unterscheiden.';
 $messages['passwdexpirewarning'] = 'Achtung! Ihr Passwort läuft am $expirationdatetime ab. Ändern Sie es rechtzeitig.';
 $messages['passwdexpired'] = 'Ihr Passwort ist abgelaufen, bitte ändern Sie es jetzt!';
+$messages['passwdconstraintviolation'] = 'Passwortrichtlinien nicht erfüllt. Das Passwort ist wahrscheinlich zu schwach.';

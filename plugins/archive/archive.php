@@ -12,9 +12,15 @@
  */
 class archive extends rcube_plugin
 {
-    public $task = 'settings|mail';
+    public $task = 'settings|mail|login';
+
+    private $archive_folder;
+    private $folders;
 
 
+    /**
+     * Plugin initialization.
+     */
     function init()
     {
         $rcmail = rcmail::get_instance();
@@ -22,14 +28,10 @@ class archive extends rcube_plugin
         // register special folder type
         rcube_storage::$folder_types[] = 'archive';
 
-        if ($rcmail->task == 'mail' && ($rcmail->action == '' || $rcmail->action == 'show')
-            && ($archive_folder = $rcmail->config->get('archive_mbox'))
-        ) {
-            $skin_path = $this->local_skin_path();
-            if (is_file($this->home . "/$skin_path/archive.css")) {
-                $this->include_stylesheet("$skin_path/archive.css");
-            }
+        $this->archive_folder = $rcmail->config->get('archive_mbox');
 
+        if ($rcmail->task == 'mail' && ($rcmail->action == '' || $rcmail->action == 'show') && $this->archive_folder) {
+            $this->include_stylesheet($this->local_skin_path() . '/archive.css');
             $this->include_script('archive.js');
             $this->add_texts('localization', true);
             $this->add_button(
@@ -51,7 +53,7 @@ class archive extends rcube_plugin
             $this->add_hook('render_mailboxlist', array($this, 'render_mailboxlist'));
 
             // set env variables for client
-            $rcmail->output->set_env('archive_folder', $archive_folder);
+            $rcmail->output->set_env('archive_folder', $this->archive_folder);
             $rcmail->output->set_env('archive_type', $rcmail->config->get('archive_type',''));
         }
         else if ($rcmail->task == 'mail') {
@@ -61,6 +63,13 @@ class archive extends rcube_plugin
         else if ($rcmail->task == 'settings') {
             $this->add_hook('preferences_list', array($this, 'prefs_table'));
             $this->add_hook('preferences_save', array($this, 'save_prefs'));
+
+            if ($rcmail->action == 'folders' && $this->archive_folder) {
+                $this->include_stylesheet($this->local_skin_path() . '/archive.css');
+                $this->include_script('archive.js');
+                // set env variables for client
+                $rcmail->output->set_env('archive_folder', $this->archive_folder);
+            }
         }
     }
 
@@ -69,18 +78,14 @@ class archive extends rcube_plugin
      */
     function render_mailboxlist($p)
     {
-        $rcmail         = rcmail::get_instance();
-        $archive_folder = $rcmail->config->get('archive_mbox');
-        $show_real_name = $rcmail->config->get('show_real_foldernames');
-
         // set localized name for the configured archive folder
-        if ($archive_folder && !$show_real_name) {
-            if (isset($p['list'][$archive_folder])) {
-                $p['list'][$archive_folder]['name'] = $this->gettext('archivefolder');
+        if ($this->archive_folder && !rcmail::get_instance()->config->get('show_real_foldernames')) {
+            if (isset($p['list'][$this->archive_folder])) {
+                $p['list'][$this->archive_folder]['name'] = $this->gettext('archivefolder');
             }
             else {
                 // search in subfolders
-                $this->_mod_folder_name($p['list'], $archive_folder, $this->gettext('archivefolder'));
+                $this->_mod_folder_name($p['list'], $this->archive_folder, $this->gettext('archivefolder'));
             }
         }
 
@@ -126,17 +131,13 @@ class archive extends rcube_plugin
         $delimiter      = $storage->get_hierarchy_delimiter();
         $read_on_move   = (bool) $rcmail->config->get('read_on_archive');
         $archive_type   = $rcmail->config->get('archive_type', '');
-        $archive_folder = $rcmail->config->get('archive_mbox');
-        $archive_prefix = $archive_folder . $delimiter;
-        $current_mbox   = rcube_utils::get_input_value('_mbox', rcube_utils::INPUT_POST);
+        $archive_prefix = $this->archive_folder . $delimiter;
         $search_request = rcube_utils::get_input_value('_search', rcube_utils::INPUT_GPC);
-        $uids           = rcube_utils::get_input_value('_uid', rcube_utils::INPUT_POST);
 
         // count messages before changing anything
         if ($_POST['_from'] != 'show') {
             $threading = (bool) $storage->get_threading();
             $old_count = $storage->count(null, $threading ? 'THREADS' : 'ALL');
-            $old_pages = ceil($old_count / $storage->get_pagesize());
         }
 
         $count = 0;
@@ -150,21 +151,21 @@ class archive extends rcube_plugin
             'destinations' => array(),
         );
 
-        foreach (rcmail::get_uids(null, null, $multifolder) as $mbox => $uids) {
-            if (!$archive_folder  || strpos($mbox, $archive_prefix) === 0) {
+        foreach (rcmail::get_uids(null, null, $multifolder, rcube_utils::INPUT_POST) as $mbox => $uids) {
+            if (!$this->archive_folder || $mbox === $this->archive_folder || strpos($mbox, $archive_prefix) === 0) {
                 $count = count($uids);
                 continue;
             }
             else if (!$archive_type || $archive_type == 'folder') {
-                $folder = $archive_folder;
+                $folder = $this->archive_folder;
 
                 if ($archive_type == 'folder') {
                     // compose full folder path
                     $folder .= $delimiter . $mbox;
-
-                    // create archive subfolder if it doesn't yet exist
-                    $this->subfolder_worker($folder);
                 }
+
+                // create archive subfolder if it doesn't yet exist
+                $this->subfolder_worker($folder);
 
                 $count += $this->move_messages_worker($uids, $mbox, $folder, $read_on_move);
             }
@@ -198,10 +199,21 @@ class archive extends rcube_plugin
                     case 'sender':
                         $subfolder = $this->sender_subfolder($message->get('from'));
                         break;
+
+                    case 'folderyear':
+                        $subfolder = $rcmail->format_date($message->timestamp, 'Y')
+                            . $delimiter . $mbox;
+                        break;
+
+                    case 'foldermonth':
+                        $subfolder = $rcmail->format_date($message->timestamp, 'Y')
+                            . $delimiter . $rcmail->format_date($message->timestamp, 'm')
+                            . $delimiter . $mbox;
+                        break;
                     }
 
                     // compose full folder path
-                    $folder = $archive_folder . ($subfolder ? $delimiter . $subfolder : '');
+                    $folder = $this->archive_folder . ($subfolder ? $delimiter . $subfolder : '');
 
                     $execute[$folder][] = $message->uid;
                 }
@@ -256,6 +268,7 @@ class archive extends rcube_plugin
         $pages          = ceil($msg_count / $page_size);
         $nextpage_count = $old_count - $page_size * $page;
         $remaining      = $msg_count - $page_size * ($page - 1);
+        $quota_root     = $multifolder ? $this->result['sources'][0] : 'INBOX';
 
         // jump back one page (user removed the whole last page)
         if ($page > 1 && $remaining == 0) {
@@ -265,22 +278,16 @@ class archive extends rcube_plugin
             $jump_back = true;
         }
 
+        // update unread messages counts for all involved folders
+        foreach ($this->result['sources'] as $folder) {
+            rcmail_send_unread_count($folder, true);
+        }
+
         // update message count display
         $rcmail->output->set_env('messagecount', $msg_count);
         $rcmail->output->set_env('current_page', $page);
         $rcmail->output->set_env('pagecount', $pages);
         $rcmail->output->set_env('exists', $exists);
-
-        // update mailboxlist
-        $unseen_count = $msg_count ? $storage->count($mbox, 'UNSEEN') : 0;
-        $old_unseen   = rcmail_get_unseen_count($mbox);
-        $quota_root   = $multifolder ? $this->result['sources'][0] : 'INBOX';
-
-        if ($old_unseen != $unseen_count) {
-            $rcmail->output->command('set_unread_count', $mbox, $unseen_count, ($mbox == 'INBOX'));
-            rcmail_set_unseen_count($mbox, $unseen_count);
-        }
-
         $rcmail->output->command('set_quota', $rcmail->quota_content(null, $quota_root));
         $rcmail->output->command('set_rowcount', rcmail_get_messagecount_text($msg_count), $mbox);
 
@@ -290,8 +297,11 @@ class archive extends rcube_plugin
 
         // add new rows from next page (if any)
         if ($addrows && $count && $uids != '*' && ($jump_back || $nextpage_count > 0)) {
+            // #5862: Don't add more rows than it was on the next page
+            $count = $jump_back ? null : min($nextpage_count, $count);
+
             $a_headers = $storage->list_messages($mbox, null,
-                rcmail_sort_column(), rcmail_sort_order(), $jump_back ? null : $count);
+                rcmail_sort_column(), rcmail_sort_order(), $count);
 
             rcmail_js_message_list($a_headers, false);
         }
@@ -349,7 +359,7 @@ class archive extends rcube_plugin
         $delimiter = $storage->get_hierarchy_delimiter();
 
         if ($this->folders === null) {
-            $this->folders = $storage->list_folders('', $archive_folder . '*', 'mail', null, true);
+            $this->folders = $storage->list_folders('', $this->archive_folder . '*', 'mail', null, true);
         }
 
         if (!in_array($folder, $this->folders)) {
@@ -404,23 +414,29 @@ class archive extends rcube_plugin
                 'content' => $select->show($mbox, array('id' => '_archive_mbox', 'name' => '_archive_mbox'))
             );
 
-            // add option for structuring the archive folder
-            $archive_type = new html_select(array('name' => '_archive_type', 'id' => 'ff_archive_type'));
-            $archive_type->add($this->gettext('none'), '');
-            $archive_type->add($this->gettext('archivetypeyear'), 'year');
-            $archive_type->add($this->gettext('archivetypemonth'), 'month');
-            $archive_type->add($this->gettext('archivetypetbmonth'), 'tbmonth');
-            $archive_type->add($this->gettext('archivetypesender'), 'sender');
-            $archive_type->add($this->gettext('archivetypefolder'), 'folder');
+            // If the server supports only either messages or folders in a folder
+            // we do not allow archive splitting, for simplicity (#5057)
+            if ($rcmail->get_storage()->get_capability(rcube_storage::DUAL_USE_FOLDERS)) {
+                // add option for structuring the archive folder
+                $archive_type = new html_select(array('name' => '_archive_type', 'id' => 'ff_archive_type'));
+                $archive_type->add($this->gettext('none'), '');
+                $archive_type->add($this->gettext('archivetypeyear'), 'year');
+                $archive_type->add($this->gettext('archivetypemonth'), 'month');
+                $archive_type->add($this->gettext('archivetypetbmonth'), 'tbmonth');
+                $archive_type->add($this->gettext('archivetypesender'), 'sender');
+                $archive_type->add($this->gettext('archivetypefolder'), 'folder');
+                $archive_type->add($this->gettext('archivetypefolderyear'), 'folderyear');
+                $archive_type->add($this->gettext('archivetypefoldermonth'), 'foldermonth');
 
-            $args['blocks']['archive'] = array(
-                'name'    => rcube::Q($this->gettext('settingstitle')),
-                'options' => array('archive_type' => array(
-                        'title'   => html::label('ff_archive_type', rcube::Q($this->gettext('archivetype'))),
-                        'content' => $archive_type->show($type)
+                $args['blocks']['archive'] = array(
+                    'name'    => rcube::Q($this->gettext('settingstitle')),
+                    'options' => array('archive_type' => array(
+                            'title'   => html::label('ff_archive_type', rcube::Q($this->gettext('archivetype'))),
+                            'content' => $archive_type->show($type)
+                        )
                     )
-                )
-            );
+                );
+            }
         }
         else if ($args['section'] == 'server' && !in_array('read_on_archive', $dont_override)) {
             $chbox = new html_checkbox(array('name' => '_read_on_archive', 'id' => 'ff_read_on_archive', 'value' => 1));
@@ -458,6 +474,7 @@ class archive extends rcube_plugin
     {
         static $delim;
         static $vendor;
+        static $skip_hidden;
 
         preg_match('/[\b<](.+@.+)[\b>]/i', $from, $m);
 
@@ -466,17 +483,29 @@ class archive extends rcube_plugin
         }
 
         if ($delim === null) {
-            $storage = rcmail::get_instance()->get_storage();
-            $delim   = $storage->get_hierarchy_delimiter();
-            $vendor  = $storage->get_vendor();
+            $rcmail      = rcmail::get_instance();
+            $storage     = $rcmail->get_storage();
+            $delim       = $storage->get_hierarchy_delimiter();
+            $vendor      = $storage->get_vendor();
+            $skip_hidden = $rcmail->config->get('imap_skip_hidden_folders');
+        }
+
+        // Remove some forbidden characters
+        $regexp = '\\x00-\\x1F\\x7F%*';
+
+        if ($vendor == 'cyrus') {
+            // List based on testing Kolab's Cyrus-IMAP 2.5
+            $regexp .= '!`(){}|\\?<;"';
+        }
+
+        $folder_name = preg_replace("/[$regexp]/", '', $m[1]);
+
+        if ($skip_hidden && $folder_name[0] == '.') {
+            $folder_name = substr($folder_name, 1);
         }
 
         $replace = $delim == '-' ? '_' : '-';
         $replacements[$delim] = $replace;
-
-        // some IMAP servers do not allow . characters
-        // @FIXME: really? which ones?
-        $replacements['.'] = $replace;
 
         // Cyrus-IMAP does not allow @ character in folder name
         if ($vendor == 'cyrus') {
@@ -484,6 +513,6 @@ class archive extends rcube_plugin
         }
 
         // replace reserved characters in folder name
-        return strtr($m[1], $replacements);
+        return strtr($folder_name, $replacements);
     }
 }
